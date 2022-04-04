@@ -1,6 +1,6 @@
 ﻿@page "/admin/crashes"
 @page "/admin"
-@*@inherits OwningComponentBase<IAccidentRepository>*@ 
+@inherits OwningComponentBase<ICrashRepository> 
 
 <table class="table table-sm table-striped table-bordered">
 
@@ -12,7 +12,7 @@
         </tr>
     </thead>
 
-    @*<tbody>
+    <tbody>
         @if(CrashData?.Count() > 0)
         {
             @foreach(Crash c in CrashData)
@@ -42,7 +42,7 @@
                 <td colespan="5" class="text-center">No Crashes</td>
             </tr>
         }
-    </tbody>*@
+    </tbody>
 </table>
 
 <NavLink class="btn btn-primary" href="/admin/crashes/create">Create</NavLink>

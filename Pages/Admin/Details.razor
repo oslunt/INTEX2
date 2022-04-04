@@ -12,24 +12,24 @@
         <tr><th>Longitude:</th><td>@c.LONG_UTM_X</td></tr>
         <tr><th>Main Road:</th><td>@c.MAIN_ROAD_NAME</td></tr>
         <tr><th>City:</th><td>@c.CITY</td></tr>
-        <tr><th>County:</th><td>@c.COUNTY</td></tr>
+        <tr><th>County:</th><td>@c.COUNTY_NAME</td></tr>
         <tr>
             <th>Crash Severity:</th>
-            @if (c.CRASH_SEVERITY_ID == "1")
+            @if (c.CRASH_SEVERITY_ID == 1)
             {
                 <td>
                     No Injury/PDO
                 </td>
             }
-            else if (c.CRASH_SEVERITY_ID == "2")
+            else if (c.CRASH_SEVERITY_ID == 2)
             {
                 <td>Possible Injury</td>
             }
-            else if (c.CRASH_SEVERITY_ID == "3")
+            else if (c.CRASH_SEVERITY_ID == 3)
             {
                 <td>Suspected Minor Injury</td>
             }
-            else if (c.CRASH_SEVERITY_ID == "4")
+            else if (c.CRASH_SEVERITY_ID == 4)
             {
                 <td>Suspected Serious Injury</td>
             }
@@ -39,7 +39,7 @@
             }
         </tr>
         <tr><th>Work Zone Related:</th><td>@c.WORK_ZONE_RELATED</td></tr>
-        <tr><th>Pedestrian Involved:</th><td>@c.PEDESTRAIN_INVOLVED</td></tr>
+        <tr><th>Pedestrian Involved:</th><td>@c.PEDESTRIAN_INVOLVED</td></tr>
         <tr><th>Bicyclist Involved:</th><td>@c.BICYCLIST_INVOLVED</td></tr>
         <tr><th>Motorcycle Involved:</th><td>@c.MOTORCYCLE_INVOLVED</td></tr>
         <tr><th>Improper Restraint:</th><td>@c.IMPROPER_RESTRAINT</td></tr>

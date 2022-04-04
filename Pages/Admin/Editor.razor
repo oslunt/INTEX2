@@ -21,7 +21,6 @@
         <ValidationMessage For="@(() => c.CRASH_DATETIME)"></ValidationMessage>
         @*<InputDate class="form-control" @bind-Value="c.CRASH_DATETIME"*@
         <input type="datetime-local" class="form-control" @bind-value="c.CRASH_DATETIME" />
-        *@
     </div>
 
     <div class="form-group">
@@ -45,7 +44,7 @@
     <div class="form-group">
         <label>Longitude:</label>
         <ValidationMessage For="@(() => c.LONG_UTM_X)"></ValidationMessage>
-        <InputText class="form-control" @bind-Value="c.LONG_UTM_X"></InputText>
+        <InputNumber class="form-control" @bind-Value="c.LONG_UTM_X"></InputNumber>
     </div>
 
     <div class="form-group">
@@ -62,13 +61,13 @@
 
     <div class="form-group">
         <label>County:</label>
-        <ValidationMessage For="@(() => c.COUNTY)"></ValidationMessage>
-        <InputText class="form-control" @bind-Value="c.COUNTY"></InputText>
+        <ValidationMessage For="@(() => c.COUNTY_NAME)"></ValidationMessage>
+        <InputText class="form-control" @bind-Value="c.COUNTY_NAME"></InputText>
     </div>
 
     <div class="form-group">
         <label>Severity:</label>
-        <ValidationMessage For="@(() => c.Severity)"></ValidationMessage>
+        <ValidationMessage For="@(() => c.CRASH_SEVERITY_ID)"></ValidationMessage>
         <InputSelect class="form-control" @bind-Value="c.CRASH_SEVERITY_ID">
             <option value="1">No injury/PDO</option>
             <option value="2">Possible injury</option>
@@ -221,14 +220,14 @@
     {
         if(Id == 0)
         {
-            repo.CreateCrash(c);
+            repo.AddCrash(c);
         }
         else
         {
             repo.SaveCrash(c);
         }
 
-        NavManager.NavigateTo("/admin/crashes", true)
+        NavManager.NavigateTo("/admin/crashes", true);
     }
 
     [Inject]
