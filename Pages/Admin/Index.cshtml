@@ -1,0 +1,21 @@
+﻿@page "/admin"
+@model INTEX2.Pages.Map.IndexModel 
+
+@{
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Incident Map</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    @*<base href"/" />*@
+</head>
+
+<body>
+    <component type="typeof(INTEX2.Pages.Map.Routed)" render-mode="Server" />
+    <script src="/_framework/blazor.server.js"></script>
+</body>
+</html>
