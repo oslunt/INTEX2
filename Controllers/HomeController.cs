@@ -7,16 +7,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using INTEX2.Models;
 
 
 namespace INTEX2.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class HomeController : Controller
     {
+        private ICrashRepository  repo {get;set;}
 
-        public HomeController()
+        public HomeController(ICrashRepository temp)
         {
+            repo = temp;
             
         }
         [AllowAnonymous]
@@ -27,6 +30,15 @@ namespace INTEX2.Controllers
         public IActionResult SignIn()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Table()
+        {
+            var c = repo.Crashes
+            .Take(10)
+            .ToList();
+            return View(c);
         }
     }
 }

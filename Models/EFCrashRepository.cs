@@ -15,8 +15,6 @@ namespace INTEX2.Models
         }
         public IQueryable<Crash> Crashes => _context.Crashes;
 
-        IQueryable<Crash> ICrashRepository.Crashes { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public void SaveCrash(Crash c)
         {
             if (c.CRASH_ID == 0)
