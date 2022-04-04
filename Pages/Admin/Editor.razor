@@ -191,4 +191,46 @@
         <ValidationMessage For="@(() => c.ROADWAY_DEPARTURE)"></ValidationMessage>
         <InputCheckbox class="form-control" @bind-Value="c.ROADWAY_DEPARTURE"></InputCheckbox>
     </div>
+
+    <button type="submit" class="btn btn-@ThemeColor">Save</button>
+    <NavLink class="btn btn-secondary" href="/admin/crashes">Cancel</NavLink>
 </EditForm>
+
+@code {
+
+    [Parameter]
+    public long Id { get; set; } = 0;
+
+    public string ThemeColor => Id == 0 ? "primary" : "warning";
+
+    public string TitleText => Id == 0 ? "Create" : "Edit";
+
+    public Crash c { get; set; } = new Crash();
+
+    public ICrashRepository repo => Service;
+
+    protected override void OnParametersSet()
+    {
+        if (Id != 0)
+        {
+            c = repo.Crashes.FirstOrDefault(x => x.CRASH_ID == Id);
+        }
+    }
+
+    public void SaveCrash()
+    {
+        if(Id == 0)
+        {
+            repo.CreateCrash(c);
+        }
+        else
+        {
+            repo.SaveCrash(c);
+        }
+
+        NavManager.NavigateTo("/admin/crashes", true)
+    }
+
+    [Inject]
+    public NavigationManager NavManager { get; set; }
+}
