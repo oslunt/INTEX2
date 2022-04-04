@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -23,6 +25,22 @@ namespace INTEX2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/account/google-login";
+                })
+                .AddGoogle(options =>
+                {
+                    options.ClientId = "800903118366-iu0bvkiq52girde4a529lbbsfhiaid2c.apps.googleusercontent.com";
+                    options.ClientSecret = "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";
+                });
+
+
             services.AddControllersWithViews();
         }
 
@@ -43,6 +61,7 @@ namespace INTEX2
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
