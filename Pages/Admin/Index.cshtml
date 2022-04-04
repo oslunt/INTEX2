@@ -1,5 +1,5 @@
 ﻿@page "/admin"
-@model INTEX2.Pages.Map.IndexModel 
+@model INTEX2.Pages.Admin.IndexModel
 
 @{
 }
@@ -7,15 +7,16 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
-    <title>Incident Map</title>
+    <title>Crashes Admin</title>
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/css/site.css" rel="stylesheet" />
-    @*<base href"/" />*@
+    <base href="/" />
 </head>
 
 <body>
-    <component type="typeof(INTEX2.Pages.Map.Routed)" render-mode="Server" />
+    <component type="typeof(INTEX2.Pages.Admin.Routed)" render-mode="Server" />
     <script src="/_framework/blazor.server.js"></script>
 </body>
+
 </html>
