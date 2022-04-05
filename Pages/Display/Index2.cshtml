@@ -1,5 +1,5 @@
 ﻿@page "/display"
-@model INTEX2.Pages.Admin.IndexModel
+@model INTEX2.Pages.Admin.Index2Model
 
 @{
 }
@@ -19,6 +19,14 @@
 <body>
     <component type="typeof(INTEX2.Pages.Display.Routed)" render-mode="Server" />
     <script src="/_framework/blazor.server.js"></script>
+
+    <script type="text/javascript">
+        function Collapse(elementId) {
+            if ($(elementId) !== null) {
+                $(elementId).collapse('toggle');
+            }
+        }
+    </script>
 </body>
 
 </html>

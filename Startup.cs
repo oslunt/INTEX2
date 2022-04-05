@@ -138,6 +138,7 @@ namespace INTEX2
                 endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/admin/{*catchall}", "/admin/Index");
+                endpoints.MapFallbackToPage("/display/{*catchall}", "/display/Index2");
             });
         }
     }

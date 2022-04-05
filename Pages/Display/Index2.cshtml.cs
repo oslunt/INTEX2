@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace INTEX2.Pages.Admin
 {
-    public class IndexModel : PageModel
+    public class Index2Model : PageModel
     {
         public void OnGet()
         {
