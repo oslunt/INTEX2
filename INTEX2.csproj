@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\Account\" />
+    <Folder Include="wwwroot\lib\qrcode\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Data\ApplicationDbContext.cs" />
@@ -44,5 +45,8 @@
     <Compile Remove="Data\Migrations\ApplicationDbContextModelSnapshot.cs" />
     <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.cs" />
     <Compile Remove="Data\Migrations\20220405143929_IdentitySetup.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\lib\qrcode\" />
   </ItemGroup>
 </Project>
