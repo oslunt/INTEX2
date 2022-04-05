@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace INTEX2.Models
 {
-    public class AppIdentityDBContext : IdentityDbContext<IdentityUser>
+    public class AppIdentityDbContext : IdentityDbContext<IdentityUser>
     {
-        public AppIdentityDBContext(DbContextOptions options) : base(options)
+        public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : base(options)
         {
         }
     }
