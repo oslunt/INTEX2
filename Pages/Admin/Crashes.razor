@@ -132,67 +132,79 @@
     </div>
 </div>
 
-    <div class="col">
-        <table class="table table-sm table-striped table-bordered">
+<div class="col">
 
-            <thead>
-                <tr>
-                    <th>Crash ID</th>
-                    <th>Crash Date</th>
-                    <th>Crash City</th>
-                </tr>
-            </thead>
+    <div class="form-group">
+        <label>Results per Page: </label>
+        <select @onchange="@UpdatePageSize">
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="75">75</option>
+            <option value="100">100</option>
+        </select>
+        <NavLink class="btn btn-primary float-right" href="/admin/crashes/create">Create</NavLink>
+    </div>
 
-            <tbody>
-                @if (CrashData?.Count() > 0)
-                {
-                    @foreach (Crash c in CrashData)
-                    {
-                        <tr>
-                            <td>@c.CRASH_ID</td>
-                            <td>@c.CRASH_DATETIME</td>
-                            <td>@c.CITY</td>
+    <table class="table table-sm table-striped table-bordered">
 
-                            <td>
-                                <NavLink class="btn btn-info btn-sm" href="@GetDetailsUrl(c.CRASH_ID)">Details</NavLink>
-                            </td>
+        <thead>
+            <tr>
+                <th>Crash ID</th>
+                <th>Crash Date</th>
+                <th>Crash City</th>
+            </tr>
+        </thead>
 
-                            <td>
-                                <NavLink class="btn btn-warning btn-sm" href="@GetEditUrl(c.CRASH_ID)">Edit</NavLink>
-                            </td>
-
-                            <td>
-                                <button class="btn btn-danger btn-sm" @onclick="@(x => RemoveCrash(c))">Delete</button>
-                            </td>
-                        </tr>
-                    }
-                }
-                else
+        <tbody>
+            @if (CrashData?.Count() > 0)
+            {
+                @foreach (Crash c in CrashData)
                 {
                     <tr>
-                        <td colespan="5" class="text-center">No Crashes</td>
+                        <td>@c.CRASH_ID</td>
+                        <td>@c.CRASH_DATETIME</td>
+                        <td>@c.CITY</td>
+
+                        <td>
+                            <NavLink class="btn btn-info btn-sm" href="@GetDetailsUrl(c.CRASH_ID)">Details</NavLink>
+                        </td>
+
+                        <td>
+                            <NavLink class="btn btn-warning btn-sm" href="@GetEditUrl(c.CRASH_ID)">Edit</NavLink>
+                        </td>
+
+                        <td>
+                            <button class="btn btn-danger btn-sm" @onclick="@(x => RemoveCrash(c))">Delete</button>
+                        </td>
                     </tr>
                 }
-            </tbody>
-        </table>
+            }
+            else
+            {
+                <tr>
+                    <td colespan="5" class="text-center">No Crashes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-        <NavLink class="btn btn-primary" href="/admin/crashes/create">Create</NavLink>
-        <br />
-        <div class="float-right">
-            <button class="btn btn-outline-primary" @onclick="@First">Page 1</button>
-            <button class="btn btn-outline-primary" @onclick="@Previous">Previous</button>
-            <button class="btn btn-primary">Page @pageNum</button>
-            <button class="btn btn-outline-primary" @onclick="@Next">Next</button>
-            <button class="btn btn-outline-primary" @onclick="@Last">Page @totalPages</button>
-        </div>
+    
+    <br />
+    <div class="float-right">
+        <button class="btn btn-outline-primary" @onclick="@First">Page 1</button>
+        <button class="btn btn-outline-primary" @onclick="@Previous">Previous</button>
+        <button class="btn btn-primary">Page @pageNum</button>
+        <button class="btn btn-outline-primary" @onclick="@Next">Next</button>
+        <button class="btn btn-outline-primary" @onclick="@Last">Page @totalPages</button>
     </div>
+</div>
 
     @code {
 
         public ICrashRepository repo => Service;
         public IEnumerable<Crash> CrashData { get; set; }
-        private int totalPages;//> (int)Math.Ceiling((double)repo.Crashes.Count() / pageSize);
-        private int pageSize = 20;
+        private int totalPages;
+        private int pageSize = 25;
         private int pageNum = 1;
         public IEnumerable<string> Cities { get; set; }
         public IEnumerable<string> Counties { get; set; }
@@ -279,6 +291,12 @@
                 .Where(c => c.DISTRACTED_DRIVING == DistractedDriving || DistractedDriving == false)
                 .Where(c => c.DROWSY_DRIVING == DrowsyDriving || DrowsyDriving == false)
                 .Where(c => c.ROADWAY_DEPARTURE == RoadwayDeparture || RoadwayDeparture == false).Count() / pageSize);
+        }
+
+        public async Task UpdatePageSize(ChangeEventArgs args)
+        {
+            pageSize = Convert.ToInt32(args.Value);
+            await UpdateData();
         }
 
         public async Task UpdateStartDate(ChangeEventArgs args)
