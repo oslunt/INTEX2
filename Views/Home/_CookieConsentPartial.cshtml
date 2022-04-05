@@ -1,7 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
 }
 @using Microsoft.AspNetCore.Http.Features
 
@@ -14,7 +11,7 @@
 @if (showBanner)
 {
     <div id="cookieConsent" class="alert alert-info alert-dismissible fade show" role="alert">
-        Drive Safe Utah uses cookies to enhance user experience. Please accept to continue. <a asp-page="/Privacy">Learn More</a>.
+        Drive Safe Utah uses cookies to enhance user experience. Please accept to continue. <a asp-controller="Home"asp-action="Privacy">Learn More</a>.
         <button type="button" class="accept-policy close" data-dismiss="alert" aria-label="Close" data-cookie-string="@cookieString">
             <span aria-hidden="true">Accept</span>
         </button>

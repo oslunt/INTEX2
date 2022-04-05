@@ -50,5 +50,11 @@ namespace INTEX2.Controllers
 
             return View(temp);
         }
+
+        [AllowAnonymous]
+        public IActionResult Privacy()
+        {
+            return View();
+        }
     }
 }

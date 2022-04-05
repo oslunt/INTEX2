@@ -36,12 +36,13 @@
         <br />
     </header>
     <div class="container">
-        <partial name="_CookieConsentPartial" />
+        
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
+    <br /><br /><br /><br />
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -50,6 +51,7 @@
         <div class="container ">
             &copy; Drive Safe Utah - Intex Project 2022 <a asp-area="" asp-controller="Home"></a>
         </div>
+        <partial name="_CookieConsentPartial" />
     </footer>
 </body>
 </html>
