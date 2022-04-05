@@ -1,7 +1,7 @@
 ﻿@page
 @model EnableAuthenticatorModel
 @{ ViewData["Title"] = "Configure authenticator app";
-                ViewData["ActivePage"] = INTEX2.Areas.Identity.Pages.Account.Manage.ManageNavPages.TwoFactorAuthentication; }
+                ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication; }
 
 <partial name="_StatusMessage" for="StatusMessage" />
 <h4>@ViewData["Title"]</h4>
@@ -57,4 +57,3 @@
                 height: 200
 });
     </script> }
-

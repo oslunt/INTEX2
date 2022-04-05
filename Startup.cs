@@ -93,6 +93,7 @@ namespace INTEX2
 
             // Setting up Identity in ASP.NET Identity Core
             services.AddIdentity<IdentityUser, IdentityRole>(
+
         options => {
             options.SignIn.RequireConfirmedAccount = false;
 
@@ -102,9 +103,12 @@ namespace INTEX2
             options.Password.RequireUppercase = true;
             options.Password.RequiredLength = 6;
             options.Password.RequiredUniqueChars = 1;
+
         }
+
         )
-                .AddEntityFrameworkStores<AppIdentityDbContext>();
+                .AddEntityFrameworkStores<AppIdentityDbContext>()
+                .AddDefaultTokenProviders();
 
 
             services.AddControllersWithViews();
