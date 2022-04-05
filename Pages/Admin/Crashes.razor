@@ -1,74 +1,296 @@
 ﻿@page "/admin/crashes"
 @page "/admin"
-@inherits OwningComponentBase<ICrashRepository> 
+@inherits OwningComponentBase<ICrashRepository>
 
-<table class="table table-sm table-striped table-bordered">
-
-    <thead>
-        <tr>
-            <th>Accident ID</th>
-            <th>Accident Date</th>
-            <th>Accident City</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @if(CrashData?.Count() > 0)
-        {
-            @foreach(Crash c in CrashData)
+<div class="col-3">
+    <div class="form-group">
+        <label>Start Date</label>
+        <input class="form-control" type="datetime-local" value="@StartDate" />
+    </div>
+    <div class="form-group">
+        <label>End Date</label>
+        <input class="form-control" type="datetime-local" />
+    </div>
+    <div class="form-group">
+        <label>City</label>
+        <select class="form-control">
+            @if (Cities?.Count() > 0)
             {
-                <tr>
-                    <td>@c.CRASH_ID</td>
-                    <td>@c.CRASH_DATETIME</td>
-                    <td>@c.CITY</td>
-
-                    <td>
-                        <NavLink class="btn btn-info btn-sm" href="@GetDetailsUrl(c.CRASH_ID)">Details</NavLink>
-                    </td>
-
-                    <td>
-                        <NavLink class="btn btn-info btn-sm" href="@GetEditUrl(c.CRASH_ID)">Edit</NavLink>
-                    </td>
-
-                    <td>
-                        <button class="btn btn-danger btn-sm" @onclick="@(x => RemoveCrash(c))">Delete</button>
-                    </td>
-                </tr>
+                <option value="">All</option>
+                @foreach (string city in Cities)
+                {
+                    <option value="@city">@city</option>
+                }
             }
-        }
-        else
+            else
+            {
+                <option value="">Loading...</option>
+            }
+
+        </select>
+    </div>
+    <div class="form-group">
+        <label>County</label>
+        <select class="form-control">
+            @if (Counties?.Count() > 0)
+            {
+                <option value="">All</option>
+                @foreach (string county in Counties)
+                {
+                    <option value="@county">@county</option>
+                }
+            }
+            else
+            {
+                <option value="">Loading...</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Crash Severity</label>
+        <select class="form-control">
+            <option value="">All</option>
+            <option value="1">No injury/PDO</option>
+            <option value="2">Possible injury</option>
+            <option value="3">Suspected Minor Injury</option>
+            <option value="4">Suspected Serious Injury</option>
+            <option value="5">Fatal</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Pedestrian Involved</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Bicyclist Involved</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Motorcycle Involved</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Improper Restraint</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Unrestrained</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>DUI</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Intersection Related</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Wild Animal Related</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Domestic Animal Related</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Overturn/Rollover</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Commercial Motor Vehicle Involved</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Teenage Driver Involved</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Older Driver Involved</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Night/Dark Conditions</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Single Vehicle</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Distracted Driving</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Drowsy Driving</label>
+        <input type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label>Roadway Departure</label>
+        <input type="checkbox" />
+    </div>
+
+    <button class="btn btn-primary" @onclick="@UpdateData">Filter</button>
+</div>
+
+    <div class="col">
+        <table class="table table-sm table-striped table-bordered">
+
+            <thead>
+                <tr>
+                    <th>Crash ID</th>
+                    <th>Crash Date</th>
+                    <th>Crash City</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (CrashData?.Count() > 0)
+                {
+                    @foreach (Crash c in CrashData)
+                    {
+                        <tr>
+                            <td>@c.CRASH_ID</td>
+                            <td>@c.CRASH_DATETIME</td>
+                            <td>@c.CITY</td>
+
+                            <td>
+                                <NavLink class="btn btn-info btn-sm" href="@GetDetailsUrl(c.CRASH_ID)">Details</NavLink>
+                            </td>
+
+                            <td>
+                                <NavLink class="btn btn-warning btn-sm" href="@GetEditUrl(c.CRASH_ID)">Edit</NavLink>
+                            </td>
+
+                            <td>
+                                <button class="btn btn-danger btn-sm" @onclick="@(x => RemoveCrash(c))">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colespan="5" class="text-center">No Crashes</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <NavLink class="btn btn-primary" href="/admin/crashes/create">Create</NavLink>
+        <br />
+        <div class="float-right">
+            <button class="btn btn-outline-primary" @onclick="@First">Page 1</button>
+            <button class="btn btn-outline-primary" @onclick="@Previous">Previous</button>
+            <button class="btn btn-primary">Page @pageNum</button>
+            <button class="btn btn-outline-primary" @onclick="@Next">Next</button>
+            <button class="btn btn-outline-primary" @onclick="@Last">Last Page</button>
+        </div>
+    </div>
+
+    @code {
+
+        public ICrashRepository repo => Service;
+        public IEnumerable<Crash> CrashData { get; set; }
+        private int totalPages => (int)Math.Ceiling((double)repo.Crashes.Count() / pageSize);
+        private int pageSize = 20;
+        private int pageNum = 1;
+        public IEnumerable<string> Cities { get; set; }
+        public IEnumerable<string> Counties { get; set; }
+        private DateTime StartDate = new DateTime();
+        private DateTime EndDate { get; set; }
+        private string City { get; set; }
+        private string County { get; set; }
+        private int CrashSeverity { get; set; }
+        private bool PEdestrianInvolved { get; set; }
+        private bool BicyclistInvolved { get; set; }
+        private bool MotorcycleInvolved { get; set; }
+        private bool ImproperRestraint { get; set; }
+        private bool Unrestrained { get; set; }
+        private bool DUI { get; set; }
+        private bool IntersectionRelated { get; set; }
+        private bool WildAnimalRelated { get; set; }
+        private bool DomesticAnimalRelated { get; set; }
+        private bool OverturnRollover { get; set; }
+        private bool CommercialMotorVehInvolved { get; set; }
+        private bool TeenageDriverInvolved { get; set; }
+        private bool OlderDriverInvolved { get; set; }
+        private bool NightDarkCondition { get; set; }
+        private bool SingleVehicle { get; set; }
+        private bool DistractedDriving { get; set; }
+        private bool DrowsyDriving { get; set; }
+        private bool RoadwayDeparture { get; set; }
+
+        protected async override Task OnInitializedAsync()
         {
-            <tr>
-                <td colespan="5" class="text-center">No Crashes</td>
-            </tr>
+            await UpdateData();
+            await GetLists();
         }
-    </tbody>
-</table>
 
-<NavLink class="btn btn-primary" href="/admin/crashes/create">Create</NavLink>
+        public async Task UpdateData()
+        {
+            CrashData = await repo.Crashes
+                .Where(c => c.CRASH_DATETIME > StartDate || StartDate == null)
+                .Skip((pageNum - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
 
-@code {
+        public async Task PropertyChange(DateTime sd)
+        {
+            StartDate = sd;
+            await UpdateData();
+        }
 
-    public ICrashRepository repo => Service;
-    public IEnumerable<Crash> CrashData { get; set;}
+        public async Task GetLists()
+        {
+            Cities = await repo.Crashes.Select(c => c.CITY).Distinct().OrderBy(c => c).ToListAsync();
+            Counties = await repo.Crashes.Select(c => c.COUNTY_NAME).Distinct().OrderBy(c => c).ToListAsync();
+        }
 
-    protected async override Task OnInitializedAsync()
-    {
-        await UpdateData();
+        public string GetDetailsUrl(long id) => $"/admin/crashes/details/{id}";
+        public string GetEditUrl(long id) => $"/admin/crashes/edit/{id}";
+
+        public async Task RemoveCrash(Crash c)
+        {
+            repo.DeleteCrash(c);
+            await UpdateData();
+        }
+
+        public async Task Next()
+        {
+            if (pageNum != totalPages)
+            {
+                pageNum = pageNum + 1;
+            }
+            await UpdateData();
+        }
+
+        public async Task Previous()
+        {
+            if (pageNum != 1)
+            {
+                pageNum = pageNum - 1;
+            }
+            await UpdateData();
+        }
+
+        public async Task First()
+        {
+            if (pageNum != 1)
+            {
+                pageNum = 1;
+            }
+            await UpdateData();
+        }
+
+        public async Task Last()
+        {
+            if (pageNum != totalPages)
+            {
+                pageNum = totalPages;
+            }
+            await UpdateData();
+        }
+
     }
-
-    public async Task UpdateData()
-    {
-        CrashData = await repo.Crashes.ToListAsync();
-    }
-
-    public string GetDetailsUrl(long id) => $"/admin/crashes/details/{id}";
-    public string GetEditUrl(long id) => $"/admin/crashes/edit/{id}";
-
-    public async Task RemoveCrash(Crash c)
-    {
-        repo.DeleteCrash(c);
-        await UpdateData();
-    }
-
-}
