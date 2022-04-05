@@ -132,7 +132,7 @@
     </div>
 </div>
 
-<div class="col">
+<div class="col-9">
 
     <div class="form-group">
         <label>Results per Page: </label>
@@ -186,61 +186,98 @@
 
                 <div id="collapseOne_@c.CRASH_ID" class="collapse @(IsVisible ? "show" : "")" >
                     <div class="card-body">
-                        <table class="table table-sm table-striped table-bordered table-hover">
+                        <table class="table table-responsive table-sm table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>ROUTE</th>
-                                    <th>MILEPOINT</th>
-                                    <th>LAT_UTM_Y</th>
-                                    <th>LONG_UTM_X</th>
-                                    <th>MAIN_ROAD_NAME</th>
-                                    <th>WORK_ZONE_RELATED</th>
-                                    <th>PEDESTRIAN_INVOLVED</th>
-                                    <th>BICYCLIST_INVOLVED</th>
-                                    <th>MOTORCYCLE_INVOLVED</th>
-                                    <th>IMPROPER_RESTRAINT</th>
-                                    <th>UNRESTRAINED</th>
-                                    <th>DUI</th>
-                                    <th>INTERSECTION_RELATED</th>
-                                    <th>WILD_ANIMAL_RELATED</th>
-                                    <th>DOMESTIC_ANIMAL_RELATED</th>
-                                    <th>OVERTURN_ROLLOVER</th>
-                                    <th>COMMERCIAL_MOTOR_VEH_INVOLVED</th>
-                                    <th>TEENAGE_DRIVER_INVOLVED</th>
-                                    <th>OLDER_DRIVER_INVOLVED</th>
-                                    <th>NIGHT_DARK_CONDITION</th>
-                                    <th>SINGLE_VEHICLE</th>
-                                    <th>DISTRACTED_DRIVING</th>
-                                    <th>DROWSY_DRIVING</th>
-                                    <th>ROADWAY_DEPARTURE</th>
+                                    <th class="text-wrap">ROUTE</th>
+                                    <th class="text-wrap">MILEPOINT</th>
+                                    <th class="text-wrap">LAT_UTM_Y</th>
+                                    <th class="text-wrap">LONG_UTM_X</th>
+                                    <th class="text-wrap">MAIN_ROAD_NAME</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>@c.ROUTE</td>
-                                    <td>@c.MILEPOINT</td>
-                                    <td>@c.LAT_UTM_Y</td>
-                                    <td>@c.LONG_UTM_X</td>
-                                    <td>@c.MAIN_ROAD_NAME</td>
-                                    <td>@c.WORK_ZONE_RELATED</td>
-                                    <td>@c.PEDESTRIAN_INVOLVED</td>
-                                    <td>@c.BICYCLIST_INVOLVED</td>
-                                    <td>@c.MOTORCYCLE_INVOLVED</td>
-                                    <td>@c.IMPROPER_RESTRAINT</td>
-                                    <td>@c.UNRESTRAINED</td>
-                                    <td>@c.DUI</td>
-                                    <td>@c.INTERSECTION_RELATED</td>
-                                    <td>@c.WILD_ANIMAL_RELATED</td>
-                                    <td>@c.DOMESTIC_ANIMAL_RELATED</td>
-                                    <td>@c.OVERTURN_ROLLOVER</td>
-                                    <td>@c.COMMERCIAL_MOTOR_VEH_INVOLVED</td>
-                                    <td>@c.TEENAGE_DRIVER_INVOLVED</td>
-                                    <td>@c.OLDER_DRIVER_INVOLVED</td>
-                                    <td>@c.NIGHT_DARK_CONDITION</td>
-                                    <td>@c.SINGLE_VEHICLE</td>
-                                    <td>@c.DISTRACTED_DRIVING</td>
-                                    <td>@c.DROWSY_DRIVING</td>
-                                    <td>@c.ROADWAY_DEPARTURE</td>
+                                    <td class="text-wrap">@c.ROUTE</td>
+                                    <td class="text-wrap">@c.MILEPOINT</td>
+                                    <td class="text-wrap">@c.LAT_UTM_Y</td>
+                                    <td class="text-wrap">@c.LONG_UTM_X</td>
+                                    <td class="text-wrap">@c.MAIN_ROAD_NAME</td>
+                                </tr>
+                            </tbody>
+
+                            <thead>
+                                <tr>
+                                    <th class="text-wrap">WORK_ZONE_RELATED</th>
+                                    <th class="text-wrap">PEDESTRIAN_INVOLVED</th>
+                                    <th class="text-wrap">BICYCLIST_INVOLVED</th>
+                                    <th class="text-wrap">MOTORCYCLE_INVOLVED</th>
+                                    <th class="text-wrap">IMPROPER_RESTRAINT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-wrap">@c.WORK_ZONE_RELATED</td>
+                                    <td class="text-wrap">@c.PEDESTRIAN_INVOLVED</td>
+                                    <td class="text-wrap">@c.BICYCLIST_INVOLVED</td>
+                                    <td class="text-wrap">@c.MOTORCYCLE_INVOLVED</td>
+                                    <td class="text-wrap">@c.IMPROPER_RESTRAINT</td>
+                                </tr>
+                            </tbody>
+
+                            <thead>
+                                <tr>
+                                    <th class="text-wrap">UNRESTRAINED</th>
+                                    <th class="text-wrap">DUI</th>
+                                    <th class="text-wrap">INTERSECTION_RELATED</th>
+                                    <th class="text-wrap">WILD_ANIMAL_RELATED</th>
+                                    <th class="text-wrap">DOMESTIC_ANIMAL_RELATED</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-wrap">@c.UNRESTRAINED</td>
+                                    <td class="text-wrap">@c.DUI</td>
+                                    <td class="text-wrap">@c.INTERSECTION_RELATED</td>
+                                    <td class="text-wrap">@c.WILD_ANIMAL_RELATED</td>
+                                    <td class="text-wrap">@c.DOMESTIC_ANIMAL_RELATED</td>
+                                </tr>
+                            </tbody>
+
+                            <thead>
+                                <tr>
+                                    <th class="text-wrap">OVERTURN_ROLLOVER</th>
+                                    <th class="text-wrap">COMMERCIAL_MOTOR_VEH_INVOLVED</th>
+                                    <th class="text-wrap">TEENAGE_DRIVER_INVOLVED</th>
+                                    <th class="text-wrap">OLDER_DRIVER_INVOLVED</th>
+                                    <th class="text-wrap">NIGHT_DARK_CONDITION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-wrap">@c.OVERTURN_ROLLOVER</td>
+                                    <td class="text-wrap">@c.COMMERCIAL_MOTOR_VEH_INVOLVED</td>
+                                    <td class="text-wrap">@c.TEENAGE_DRIVER_INVOLVED</td>
+                                    <td class="text-wrap">@c.OLDER_DRIVER_INVOLVED</td>
+                                    <td class="text-wrap">@c.NIGHT_DARK_CONDITION</td>
+                                </tr>
+                            </tbody>
+
+                            <thead>
+                                <tr>
+
+                                    <th class="text-wrap">SINGLE_VEHICLE</th>
+                                    <th class="text-wrap">DISTRACTED_DRIVING</th>
+                                    <th class="text-wrap">DROWSY_DRIVING</th>
+                                    <th class="text-wrap">ROADWAY_DEPARTURE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-wrap">@c.SINGLE_VEHICLE</td>
+                                    <td class="text-wrap">@c.DISTRACTED_DRIVING</td>
+                                    <td class="text-wrap">@c.DROWSY_DRIVING</td>
+                                    <td class="text-wrap">@c.ROADWAY_DEPARTURE</td>
                                 </tr>
                             </tbody>
                         </table>
