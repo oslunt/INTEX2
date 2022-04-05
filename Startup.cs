@@ -84,19 +84,16 @@ namespace INTEX2
             });
 
             // Setting up Identity in ASP.NET Identity Core
-            services.AddIdentity<IdentityUser, IdentityRole>(
-        options => {
-            options.SignIn.RequireConfirmedAccount = false;
+            services.AddIdentity<IdentityUser, IdentityRole>(options => {
+                options.SignIn.RequireConfirmedAccount = false;
 
-            options.Password.RequireDigit = true;
-            options.Password.RequireLowercase = true;
-            options.Password.RequireNonAlphanumeric = true;
-            options.Password.RequireUppercase = true;
-            options.Password.RequiredLength = 6;
-            options.Password.RequiredUniqueChars = 1;
-        }
-        )
-                .AddEntityFrameworkStores<AppIdentityDbContext>();
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+            }).AddEntityFrameworkStores<AppIdentityDbContext>();
 
 
             services.AddControllersWithViews();
