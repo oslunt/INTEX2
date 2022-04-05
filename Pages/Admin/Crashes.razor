@@ -3,20 +3,21 @@
 @inherits OwningComponentBase<ICrashRepository>
 
 <div class="col-3">
+
     <div class="form-group">
         <label>Start Date</label>
-        <input class="form-control" type="datetime-local" value="@StartDate" />
+        <input class="form-control" type="datetime-local" value="@StartDate" @onchange="@UpdateStartDate" />
     </div>
     <div class="form-group">
         <label>End Date</label>
-        <input class="form-control" type="datetime-local" />
+        <input class="form-control" type="datetime-local" value="@EndDate" @onchange="@UpdateEndDate" />
     </div>
     <div class="form-group">
         <label>City</label>
-        <select class="form-control">
+        <select class="form-control" @onchange="@UpdateCity">
             @if (Cities?.Count() > 0)
             {
-                <option value="">All</option>
+                <option value="all">All</option>
                 @foreach (string city in Cities)
                 {
                     <option value="@city">@city</option>
@@ -31,10 +32,10 @@
     </div>
     <div class="form-group">
         <label>County</label>
-        <select class="form-control">
+        <select class="form-control" @onchange="@UpdateCounty">
             @if (Counties?.Count() > 0)
             {
-                <option value="">All</option>
+                <option value="all">All</option>
                 @foreach (string county in Counties)
                 {
                     <option value="@county">@county</option>
@@ -48,7 +49,7 @@
     </div>
     <div class="form-group">
         <label>Crash Severity</label>
-        <select class="form-control">
+        <select class="form-control" @onchange="@UpdateCrashSeverity">
             <option value="">All</option>
             <option value="1">No injury/PDO</option>
             <option value="2">Possible injury</option>
@@ -59,78 +60,76 @@
     </div>
     <div class="form-group">
         <label>Pedestrian Involved</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdatePedestrianInvolved" />
     </div>
     <div class="form-group">
         <label>Bicyclist Involved</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateBicyclistInvolved" />
     </div>
     <div class="form-group">
         <label>Motorcycle Involved</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateMotorcycleInvolved" />
     </div>
     <div class="form-group">
         <label>Improper Restraint</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateImproperRestraint" />
     </div>
     <div class="form-group">
         <label>Unrestrained</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateUnrestrained" />
     </div>
     <div class="form-group">
         <label>DUI</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateDUI" />
     </div>
     <div class="form-group">
         <label>Intersection Related</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateIntersectionRelated" />
     </div>
     <div class="form-group">
         <label>Wild Animal Related</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateWildAnimalRelated" />
     </div>
     <div class="form-group">
         <label>Domestic Animal Related</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateDomesticAnimalRelated" />
     </div>
     <div class="form-group">
         <label>Overturn/Rollover</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateOverturnRollover" />
     </div>
     <div class="form-group">
         <label>Commercial Motor Vehicle Involved</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateCommercialMotorVehInvolved" />
     </div>
     <div class="form-group">
         <label>Teenage Driver Involved</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateTeenageDriverInvolved" />
     </div>
     <div class="form-group">
         <label>Older Driver Involved</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateOlderDriverInvolved" />
     </div>
     <div class="form-group">
         <label>Night/Dark Conditions</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateNightDarkCondition" />
     </div>
     <div class="form-group">
         <label>Single Vehicle</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateSingleVehicle" />
     </div>
     <div class="form-group">
         <label>Distracted Driving</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateDistractedDriving" />
     </div>
     <div class="form-group">
         <label>Drowsy Driving</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateDrowsyDriving" />
     </div>
     <div class="form-group">
         <label>Roadway Departure</label>
-        <input type="checkbox" />
+        <input type="checkbox" @onchange="@UpdateRoadwayDeparture" />
     </div>
-
-    <button class="btn btn-primary" @onclick="@UpdateData">Filter</button>
 </div>
 
     <div class="col">
@@ -184,7 +183,7 @@
             <button class="btn btn-outline-primary" @onclick="@Previous">Previous</button>
             <button class="btn btn-primary">Page @pageNum</button>
             <button class="btn btn-outline-primary" @onclick="@Next">Next</button>
-            <button class="btn btn-outline-primary" @onclick="@Last">Last Page</button>
+            <button class="btn btn-outline-primary" @onclick="@Last">Page @totalPages</button>
         </div>
     </div>
 
@@ -192,17 +191,17 @@
 
         public ICrashRepository repo => Service;
         public IEnumerable<Crash> CrashData { get; set; }
-        private int totalPages => (int)Math.Ceiling((double)repo.Crashes.Count() / pageSize);
+        private int totalPages;//> (int)Math.Ceiling((double)repo.Crashes.Count() / pageSize);
         private int pageSize = 20;
         private int pageNum = 1;
         public IEnumerable<string> Cities { get; set; }
         public IEnumerable<string> Counties { get; set; }
-        private DateTime StartDate = new DateTime();
-        private DateTime EndDate { get; set; }
+        private DateTime StartDate { get; set; } = new DateTime();
+        private DateTime EndDate { get; set; } = DateTime.Now;
         private string City { get; set; }
         private string County { get; set; }
         private int CrashSeverity { get; set; }
-        private bool PEdestrianInvolved { get; set; }
+        private bool PedestrianInvolved { get; set; }
         private bool BicyclistInvolved { get; set; }
         private bool MotorcycleInvolved { get; set; }
         private bool ImproperRestraint { get; set; }
@@ -231,14 +230,202 @@
         {
             CrashData = await repo.Crashes
                 .Where(c => c.CRASH_DATETIME > StartDate || StartDate == null)
+                .Where(c => c.CRASH_DATETIME < EndDate || EndDate == null)
+                .Where(c => c.CITY == City || City == null)
+                .Where(c => c.COUNTY_NAME == County || County == null)
+                .Where(c => c.CRASH_SEVERITY_ID == CrashSeverity || CrashSeverity == 0)
+                .Where(c => c.PEDESTRIAN_INVOLVED == PedestrianInvolved || PedestrianInvolved == false)
+                .Where(c => c.BICYCLIST_INVOLVED == BicyclistInvolved || BicyclistInvolved == false)
+                .Where(c => c.MOTORCYCLE_INVOLVED == MotorcycleInvolved || MotorcycleInvolved == false)
+                .Where(c => c.IMPROPER_RESTRAINT == ImproperRestraint || ImproperRestraint == false)
+                .Where(c => c.UNRESTRAINED == Unrestrained || Unrestrained == false)
+                .Where(c => c.DUI == DUI || DUI == false)
+                .Where(c => c.INTERSECTION_RELATED == IntersectionRelated || IntersectionRelated == false)
+                .Where(c => c.WILD_ANIMAL_RELATED == WildAnimalRelated || WildAnimalRelated == false)
+                .Where(c => c.DOMESTIC_ANIMAL_RELATED == DomesticAnimalRelated || DomesticAnimalRelated == false)
+                .Where(c => c.OVERTURN_ROLLOVER == OverturnRollover || OverturnRollover == false)
+                .Where(c => c.COMMERCIAL_MOTOR_VEH_INVOLVED == CommercialMotorVehInvolved || CommercialMotorVehInvolved == false)
+                .Where(c => c.TEENAGE_DRIVER_INVOLVED == TeenageDriverInvolved || TeenageDriverInvolved == false)
+                .Where(c => c.OLDER_DRIVER_INVOLVED == OlderDriverInvolved || OlderDriverInvolved == false)
+                .Where(c => c.NIGHT_DARK_CONDITION == NightDarkCondition || NightDarkCondition == false)
+                .Where(c => c.SINGLE_VEHICLE == SingleVehicle || SingleVehicle == false)
+                .Where(c => c.DISTRACTED_DRIVING == DistractedDriving || DistractedDriving == false)
+                .Where(c => c.DROWSY_DRIVING == DrowsyDriving || DrowsyDriving == false)
+                .Where(c => c.ROADWAY_DEPARTURE == RoadwayDeparture || RoadwayDeparture == false)
                 .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+            totalPages = (int)Math.Ceiling((double)repo.Crashes
+                .Where(c => c.CRASH_DATETIME > StartDate || StartDate == null)
+                .Where(c => c.CRASH_DATETIME < EndDate || EndDate == null)
+                .Where(c => c.CITY == City || City == null)
+                .Where(c => c.COUNTY_NAME == County || County == null)
+                .Where(c => c.CRASH_SEVERITY_ID == CrashSeverity || CrashSeverity == 0)
+                .Where(c => c.PEDESTRIAN_INVOLVED == PedestrianInvolved || PedestrianInvolved == false)
+                .Where(c => c.BICYCLIST_INVOLVED == BicyclistInvolved || BicyclistInvolved == false)
+                .Where(c => c.MOTORCYCLE_INVOLVED == MotorcycleInvolved || MotorcycleInvolved == false)
+                .Where(c => c.IMPROPER_RESTRAINT == ImproperRestraint || ImproperRestraint == false)
+                .Where(c => c.UNRESTRAINED == Unrestrained || Unrestrained == false)
+                .Where(c => c.DUI == DUI || DUI == false)
+                .Where(c => c.INTERSECTION_RELATED == IntersectionRelated || IntersectionRelated == false)
+                .Where(c => c.WILD_ANIMAL_RELATED == WildAnimalRelated || WildAnimalRelated == false)
+                .Where(c => c.DOMESTIC_ANIMAL_RELATED == DomesticAnimalRelated || DomesticAnimalRelated == false)
+                .Where(c => c.OVERTURN_ROLLOVER == OverturnRollover || OverturnRollover == false)
+                .Where(c => c.COMMERCIAL_MOTOR_VEH_INVOLVED == CommercialMotorVehInvolved || CommercialMotorVehInvolved == false)
+                .Where(c => c.TEENAGE_DRIVER_INVOLVED == TeenageDriverInvolved || TeenageDriverInvolved == false)
+                .Where(c => c.OLDER_DRIVER_INVOLVED == OlderDriverInvolved || OlderDriverInvolved == false)
+                .Where(c => c.NIGHT_DARK_CONDITION == NightDarkCondition || NightDarkCondition == false)
+                .Where(c => c.SINGLE_VEHICLE == SingleVehicle || SingleVehicle == false)
+                .Where(c => c.DISTRACTED_DRIVING == DistractedDriving || DistractedDriving == false)
+                .Where(c => c.DROWSY_DRIVING == DrowsyDriving || DrowsyDriving == false)
+                .Where(c => c.ROADWAY_DEPARTURE == RoadwayDeparture || RoadwayDeparture == false).Count() / pageSize);
         }
 
-        public async Task PropertyChange(DateTime sd)
+        public async Task UpdateStartDate(ChangeEventArgs args)
         {
-            StartDate = sd;
+            StartDate = Convert.ToDateTime(args.Value);
+            await UpdateData();
+
+        }
+
+        public async Task UpdateEndDate(ChangeEventArgs args)
+        {
+            EndDate = Convert.ToDateTime(args.Value);
+            await UpdateData();
+
+        }
+
+        public async Task UpdateCity(ChangeEventArgs args)
+        {
+            City = args.Value.ToString();
+            if (City == "all")
+            {
+                City = null;
+            }
+            await UpdateData();
+        }
+
+        public async Task UpdateCounty(ChangeEventArgs args)
+        {
+            County = args.Value.ToString();
+            if (County == "all")
+            {
+                County = null;
+            }
+            await UpdateData();
+        }
+
+        public async Task UpdateCrashSeverity(ChangeEventArgs args)
+        {
+            CrashSeverity = Convert.ToInt32(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdatePedestrianInvolved(ChangeEventArgs args)
+        {
+            PedestrianInvolved = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateBicyclistInvolved(ChangeEventArgs args)
+        {
+            BicyclistInvolved = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateMotorcycleInvolved(ChangeEventArgs args)
+        {
+            MotorcycleInvolved = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateImproperRestraint(ChangeEventArgs args)
+        {
+            ImproperRestraint = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateUnrestrained(ChangeEventArgs args)
+        {
+            Unrestrained = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateDUI(ChangeEventArgs args)
+        {
+            DUI = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateIntersectionRelated(ChangeEventArgs args)
+        {
+            IntersectionRelated = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateWildAnimalRelated(ChangeEventArgs args)
+        {
+            WildAnimalRelated = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateDomesticAnimalRelated(ChangeEventArgs args)
+        {
+            DomesticAnimalRelated = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateOverturnRollover(ChangeEventArgs args)
+        {
+            OverturnRollover = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateCommercialMotorVehInvolved(ChangeEventArgs args)
+        {
+            CommercialMotorVehInvolved = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateTeenageDriverInvolved(ChangeEventArgs args)
+        {
+            TeenageDriverInvolved = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateOlderDriverInvolved(ChangeEventArgs args)
+        {
+            OlderDriverInvolved = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateNightDarkCondition(ChangeEventArgs args)
+        {
+            NightDarkCondition = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateSingleVehicle(ChangeEventArgs args)
+        {
+            SingleVehicle = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateDistractedDriving(ChangeEventArgs args)
+        {
+            DistractedDriving = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateDrowsyDriving(ChangeEventArgs args)
+        {
+            DrowsyDriving = Convert.ToBoolean(args.Value);
+            await UpdateData();
+        }
+
+        public async Task UpdateRoadwayDeparture(ChangeEventArgs args)
+        {
+            RoadwayDeparture = Convert.ToBoolean(args.Value);
             await UpdateData();
         }
 
