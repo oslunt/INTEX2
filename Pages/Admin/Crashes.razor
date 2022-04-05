@@ -51,6 +51,10 @@
 
     public ICrashRepository repo => Service;
     public IEnumerable<Crash> CrashData { get; set;}
+    //private int pageSize = 20;
+    //private int pageNum = 1;
+
+    //public CrashesViewModel crashesViewModel { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
@@ -59,7 +63,18 @@
 
     public async Task UpdateData()
     {
-        CrashData = await repo.Crashes.ToListAsync();
+        //crashesViewModel = new CrashesViewModel
+        //{
+        //    Crashes = await repo.Crashes.Skip((pageNum - 1) * pageSize).Take(pageSize).ToListAsync(),
+
+        //    PageInfo = new PageInfo
+        //    {
+        //        TotalNumCrashes = (repo.Crashes.Count()),
+        //        CrashesPerPage = pageSize,
+        //        CurrentPage = pageNum,
+        //    }
+        //};
+        CrashData = await repo.Crashes.Take(20).ToListAsync();
     }
 
     public string GetDetailsUrl(long id) => $"/admin/crashes/details/{id}";
