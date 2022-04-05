@@ -35,7 +35,6 @@ namespace INTEX2.Controllers
         {
             int pageSize = 10;
 
-            //var temp = repo.Crashes.Take(10).ToList();
             var temp = new CrashesViewModel
             {
                 Crashes = repo.Crashes.Skip((pageNum - 1) * pageSize).Take(pageSize).ToList(),
