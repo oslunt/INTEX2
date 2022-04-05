@@ -27,7 +27,7 @@
                     </td>
 
                     <td>
-                        <NavLink class="btn btn-info btn-sm" href="@GetEditUrl(c.CRASH_ID)">Edit</NavLink>
+                        <NavLink class="btn btn-warning btn-sm" href="@GetEditUrl(c.CRASH_ID)">Edit</NavLink>
                     </td>
 
                     <td>
@@ -46,15 +46,23 @@
 </table>
 
 <NavLink class="btn btn-primary" href="/admin/crashes/create">Create</NavLink>
+<br />
+<div class="float-right">
+    <button class="btn btn-outline-primary" @onclick="@First">Page 1</button>
+    <button class="btn btn-outline-primary" @onclick="@Previous">Previous</button>
+    <button class="btn btn-primary">Page @pageNum</button>
+    <button class="btn btn-outline-primary" @onclick="@Next">Next</button>
+    <button class="btn btn-outline-primary" @onclick="@Last">Last Page</button>
+</div>
 
 @code {
 
     public ICrashRepository repo => Service;
     public IEnumerable<Crash> CrashData { get; set;}
-    //private int pageSize = 20;
-    //private int pageNum = 1;
+    private int totalPages => (int)Math.Ceiling((double)repo.Crashes.Count() / pageSize);
+    private int pageSize = 20;
+    private int pageNum = 1;
 
-    //public CrashesViewModel crashesViewModel { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
@@ -63,18 +71,7 @@
 
     public async Task UpdateData()
     {
-        //crashesViewModel = new CrashesViewModel
-        //{
-        //    Crashes = await repo.Crashes.Skip((pageNum - 1) * pageSize).Take(pageSize).ToListAsync(),
-
-        //    PageInfo = new PageInfo
-        //    {
-        //        TotalNumCrashes = (repo.Crashes.Count()),
-        //        CrashesPerPage = pageSize,
-        //        CurrentPage = pageNum,
-        //    }
-        //};
-        CrashData = await repo.Crashes.Take(20).ToListAsync();
+        CrashData = await repo.Crashes.Skip((pageNum - 1) * pageSize).Take(pageSize).ToListAsync();
     }
 
     public string GetDetailsUrl(long id) => $"/admin/crashes/details/{id}";
@@ -83,6 +80,42 @@
     public async Task RemoveCrash(Crash c)
     {
         repo.DeleteCrash(c);
+        await UpdateData();
+    }
+
+    public async Task Next()
+    {
+        if (pageNum != totalPages)
+        {
+            pageNum = pageNum + 1;
+        }
+        await UpdateData();
+    }
+
+    public async Task Previous()
+    {
+        if (pageNum != 1)
+        {
+            pageNum = pageNum - 1;
+        }
+        await UpdateData();
+    }
+
+    public async Task First()
+    {
+        if (pageNum != 1)
+        {
+            pageNum = 1;
+        }
+        await UpdateData();
+    }
+
+    public async Task Last()
+    {
+        if (pageNum != totalPages)
+        {
+            pageNum = totalPages;
+        }
         await UpdateData();
     }
 
