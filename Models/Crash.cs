@@ -13,7 +13,7 @@ namespace INTEX2.Models
         public int CRASH_ID { get; set; }
         public DateTime CRASH_DATETIME { get; set; }
         public string ROUTE { get; set; }
-        public int MILEPOINT { get; set; }
+        public float MILEPOINT { get; set; }
         public float LAT_UTM_Y { get; set; }
         public float LONG_UTM_X { get; set; }
         public string MAIN_ROAD_NAME { get; set; }
@@ -39,8 +39,5 @@ namespace INTEX2.Models
         public bool DISTRACTED_DRIVING { get; set; }
         public bool DROWSY_DRIVING { get; set; }
         public bool ROADWAY_DEPARTURE { get; set; }
-
-
-
     }
 }

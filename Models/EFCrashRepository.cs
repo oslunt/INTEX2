@@ -6,55 +6,31 @@ using System.Threading.Tasks;
 namespace INTEX2.Models
 {
     public class EFCrashRepository : ICrashRepository
-
     {
-        private CrashDbContext _context { get; set; }
-        public EFCrashRepository(CrashDbContext temp)
+        private CrashDbContext context { get; set; }
+
+        public EFCrashRepository (CrashDbContext temp)
         {
-            _context = temp;
+            context = temp;
         }
-        public IQueryable<Crash> Crashes => _context.Crashes;
-
-        IQueryable<Crash> ICrashRepository.Crashes { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public void SaveCrash(Crash c)
-        {
-            if (c.CRASH_ID == 0)
-            {
-                var max = _context.Crashes.Max(x => x.CRASH_ID);
-                c.CRASH_ID = max + 1;
-                _context.Update(c);
-                _context.SaveChanges();
-            }
-
-            else
-            {
-                _context.Update(c);
-                _context.SaveChanges();
-            }
-        }
+        public IQueryable<Crash> Crashes => context.Crashes;
 
         public void AddCrash(Crash c)
         {
-            if (c.CRASH_ID == 0)
-            {
-                var max = _context.Crashes.Max(x => x.CRASH_ID);
-                c.CRASH_ID = max + 1;
-                _context.Add(c);
-                _context.SaveChanges();
-            }
-
-            else
-            {
-                _context.Add(c);
-                _context.SaveChanges();
-            }
+            context.Add(c);
+            context.SaveChanges();
         }
 
         public void DeleteCrash(Crash c)
         {
-            _context.Remove(c);
-            _context.SaveChanges();
+            context.Remove(c);
+            context.SaveChanges();
+        }
+
+        public void SaveCrash(Crash c)
+        {
+            context.Update(c);
+            context.SaveChanges();
         }
     }
 }

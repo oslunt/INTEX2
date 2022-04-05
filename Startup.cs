@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace INTEX2
 {
@@ -48,9 +50,11 @@ namespace INTEX2
             
 
             // Google login ability 
+
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
             })
                 //.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -112,14 +116,19 @@ namespace INTEX2
            
             app.UseStaticFiles();
             app.UseRouting();
-            
 
-            // For Identity 
             app.UseAuthentication();
+            app.UseCookiePolicy();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    "Paging",
+                    "Page{pageNum}",
+                    new { Controller = "Home", action = "Temp", pageNum = 1 });
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

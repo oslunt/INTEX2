@@ -23,7 +23,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Temp">Temp</a>
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -31,11 +34,13 @@
         <br />
     </header>
     <div class="container">
+        
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
+    <br /><br /><br /><br />
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -44,6 +49,7 @@
         <div class="container ">
             &copy; Drive Safe Utah - Intex Project 2022 <a asp-area="" asp-controller="Home"></a>
         </div>
+        <partial name="_CookieConsentPartial" />
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
