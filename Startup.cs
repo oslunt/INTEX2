@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.ML.OnnxRuntime;
 
 namespace INTEX2
 {
@@ -47,7 +48,11 @@ namespace INTEX2
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            
+
+            //onnx stuff. Put onnx model in main directory like sqlite. 
+            services.AddSingleton<InferenceSession>(
+                new InferenceSession("final_model2.onnx"));
+
 
             // Google login ability 
 

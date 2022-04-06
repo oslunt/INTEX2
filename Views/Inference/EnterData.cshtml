@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Predict Crash Input";
+}
+
+@model Crash_pred
+
+<form method="post" asp-controller="Inference" asp-action="Score">
+
+    <!--Adjust for the models features -->
+    <div><label>Intersection Related:</label><input asp-for="intersection_related" value="0" /></div>
+    <div><label>Teenage Driver Involved:</label><input asp-for="teenage_driver_involved" value="1" /></div>
+    <div><label>Older Driver Involved:</label><input asp-for="older_driver_involved" value="1" /></div>
+    <div><label>Night Dark Condition</label><input asp-for="night_dark_condition" value="0" /></div>
+    <div><label>Single Vehicle</label><input asp-for="single_vehicle" value="0" /></div>
+    <div><label>Roadway Departure</label><input asp-for="roadway_departure" value="0" /></div>
+    <div><label>Main Road Name</label><input asp-for="main_road_name_Other" value="1" /></div>
+    <div><label>City Outside City</label><input asp-for="city_Outside_City_Limits" value="0" /></div>
+    <div><label>City Other</label><input asp-for="city_Other" value="0" /></div>
+    <div><label>County Name Other</label><input asp-for="county_name_Other" value="0" /></div>
+    <div><label>County Name Salt Lake</label><input asp-for="county_name_Salt_Lake" value="0" /></div>
+    <div><label>County Name Utah</label><input asp-for="county_name_UTAH" value="0" /></div>
+
+    <button type="submit">Calculate</button>
+</form>

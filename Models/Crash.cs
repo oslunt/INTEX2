@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.ML.OnnxRuntime.Tensors;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -39,5 +40,6 @@ namespace INTEX2.Models
         public bool DISTRACTED_DRIVING { get; set; }
         public bool DROWSY_DRIVING { get; set; }
         public bool ROADWAY_DEPARTURE { get; set; }
+
     }
 }
