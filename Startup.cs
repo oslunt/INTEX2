@@ -56,6 +56,11 @@ namespace INTEX2
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AppIdentityDbContext>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequiredLength = 13;
+                options.Password.RequiredUniqueChars = 8;
+            });
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -97,7 +102,7 @@ namespace INTEX2
                 endpoints.MapFallbackToPage("/admin/{*catchall}", "/admin/Index");
                 endpoints.MapFallbackToPage("/display/{*catchall}", "/display/Index2");
 
-                IdentitySeedData.EnsurePopulated(app);
+                //IdentitySeedData.EnsurePopulated(app);
             });
         }
     }

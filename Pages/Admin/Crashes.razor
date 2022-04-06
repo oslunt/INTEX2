@@ -6,11 +6,11 @@
 
     <div class="form-group">
         <label>Start Date</label>
-        <input class="form-control" type="datetime-local" value="@StartDate" @onchange="@UpdateStartDate" />
+        <input class="form-control" type="datetime-local" value="@startdate" @onchange="@UpdateStartDate" min="2016-01-01T00:00" />
     </div>
     <div class="form-group">
         <label>End Date</label>
-        <input class="form-control" type="datetime-local" value="@EndDate" @onchange="@UpdateEndDate" />
+        <input class="form-control" type="datetime-local" value="@enddate" @onchange="@UpdateEndDate" />
     </div>
     <div class="form-group">
         <label>City</label>
@@ -208,8 +208,12 @@
     private int pageNum = 1;
     public IEnumerable<string> Cities { get; set; }
     public IEnumerable<string> Counties { get; set; }
-    private DateTime StartDate { get; set; } = new DateTime();
+
+    private DateTime StartDate { get; set; } = Convert.ToDateTime("2016-01-01T00:00");
     private DateTime EndDate { get; set; } = DateTime.Now;
+    private string startdate { get; set; }
+    private string enddate { get; set; }
+
     private string City { get; set; }
     private string County { get; set; }
     private int CrashSeverity { get; set; }
@@ -240,6 +244,8 @@
 
     public async Task UpdateData()
     {
+        startdate = StartDate.ToString("yyyy-MM-dd HH:mm:ss").Replace(' ', 'T');
+        enddate = EndDate.ToString("yyyy-MM-dd HH:mm:ss").Replace(' ', 'T');
         CrashData = await repo.Crashes
             .Where(c => c.CRASH_DATETIME > StartDate || StartDate == null)
             .Where(c => c.CRASH_DATETIME < EndDate || EndDate == null)
@@ -266,6 +272,7 @@
             .Where(c => c.ROADWAY_DEPARTURE == RoadwayDeparture || RoadwayDeparture == false)
             .Skip((pageNum - 1) * pageSize)
             .Take(pageSize)
+            .OrderBy(c => c.CRASH_ID)
             .ToListAsync();
         totalPages = (int)Math.Ceiling((double)repo.Crashes
             .Where(c => c.CRASH_DATETIME > StartDate || StartDate == null)
