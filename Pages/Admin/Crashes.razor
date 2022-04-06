@@ -174,7 +174,8 @@
                         </td>
 
                         <td>
-                            <button class="btn btn-danger btn-sm" @onclick="@(x => RemoveCrash(c))">Delete</button>
+                            <NavLink class="btn btn-danger btn-sm" href="@GetDeleteUrl(c.CRASH_ID)">Delete</NavLink>
+                            @*<button class="btn btn-danger btn-sm" @onclick="@(x => RemoveCrash(c))">Delete</button>*@
                         </td>
                     </tr>
                 }
@@ -247,7 +248,7 @@
         startdate = StartDate.ToString("yyyy-MM-dd HH:mm:ss").Replace(' ', 'T');
         enddate = EndDate.ToString("yyyy-MM-dd HH:mm:ss").Replace(' ', 'T');
         CrashData = await repo.Crashes
-            .Where(c => c.CRASH_DATETIME > StartDate || StartDate == null)
+            .Where(c => c.CRASH_DATETIME >= StartDate || StartDate == null)
             .Where(c => c.CRASH_DATETIME < EndDate || EndDate == null)
             .Where(c => c.CITY == City || City == null)
             .Where(c => c.COUNTY_NAME == County || County == null)
@@ -462,6 +463,7 @@
 
     public string GetDetailsUrl(long id) => $"/admin/crashes/details/{id}";
     public string GetEditUrl(long id) => $"/admin/crashes/edit/{id}";
+    public string GetDeleteUrl(long id) => $"/admin/crashes/delete/{id}";
 
     public async Task RemoveCrash(Crash c)
     {

@@ -47,7 +47,7 @@ namespace INTEX2.Controllers
                     }
                 }
             }
-            ModelState.AddModelError("", "Invalide name or password");
+            ModelState.AddModelError("", "Invalid name or password");
             return View(loginModel);
         }
 

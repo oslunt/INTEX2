@@ -20,7 +20,7 @@
         <div class="form-group">
             <label>Date:</label>
             <ValidationMessage For="@(() => c.CRASH_DATETIME)"></ValidationMessage>
-            <InputDate class="form-control" @bind-Value="c.CRASH_DATETIME"></InputDate>
+            <InputDate class="form-control" @bind-Value="c.CRASH_DATETIME" min="2016-01-01"></InputDate>
         </div>
 
         <div class="form-group">
@@ -299,6 +299,10 @@
             {
                 c = repo.Crashes.FirstOrDefault(x => x.CRASH_ID == Id);
                 time = c.CRASH_DATETIME.TimeOfDay;
+            }
+            else
+            {
+                c.CRASH_DATETIME = Convert.ToDateTime("2016-01-01T00:00");
             }
         }
 
