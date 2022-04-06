@@ -15,13 +15,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.23" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.7" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.23" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.23" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.23" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.23" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,7 +29,6 @@
     <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pages\Account\" />
     <Folder Include="wwwroot\lib\qrcode\" />
   </ItemGroup>
   <ItemGroup>
