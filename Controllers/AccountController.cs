@@ -2,40 +2,59 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using INTEX2.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace INTEX2.Controllers
 {
-    [AllowAnonymous, Route("account")]
+    
     public class AccountController : Controller
     {
-        [Route("google-login")]
-        public IActionResult GoogleLogin()
+        private UserManager<IdentityUser> userManager;
+        private SignInManager<IdentityUser> signInManager;
+
+        public AccountController(UserManager<IdentityUser> um, SignInManager<IdentityUser> sim)
         {
-
-            var properties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleResponse") };
-
-            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+            userManager = um;
+            signInManager = sim;
         }
-        [Route("google-response")]
-        public async Task<IActionResult> GoogleResponse()
-        {
-            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            var claims = result.Principal.Identities.FirstOrDefault()
-                .Claims.Select(claim => new
+        [HttpGet]
+        public IActionResult Login(string returnUrl)
+        {
+            return View(new LoginModel { ReturnUrl = returnUrl });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginModel loginModel)
+        {
+            if (ModelState.IsValid)
+            {
+                IdentityUser user = await userManager.FindByNameAsync(loginModel.Username);
+
+                if (user != null)
                 {
-                    claim.Issuer,
-                    claim.OriginalIssuer,
-                    claim.Type,
-                    claim.Value
-                });
-            return Json(claims);
+                    await signInManager.SignOutAsync();
+
+                    if ((await signInManager.PasswordSignInAsync(user, loginModel.Password, false, false)).Succeeded)
+                    {
+                        return Redirect(loginModel?.ReturnUrl ?? "/admin");
+                    }
+                }
+            }
+            ModelState.AddModelError("", "Invalide name or password");
+            return View(loginModel);
+        }
+
+        public async Task<RedirectResult> Logout(string returnUrl = "/")
+        {
+            await signInManager.SignOutAsync();
+            return Redirect(returnUrl);
         }
     }
 }
