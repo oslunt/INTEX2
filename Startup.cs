@@ -50,7 +50,10 @@ namespace INTEX2
             {
                 options.UseMySql(Configuration["ConnectionStrings:IdentityDbConnection"]);
             });
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            //services.AddIdentity<IdentityUser, IdentityRole>()
+            //    .AddEntityFrameworkStores<AppIdentityDbContext>();
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AppIdentityDbContext>();
 
             services.AddControllersWithViews();
