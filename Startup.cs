@@ -42,7 +42,8 @@ namespace INTEX2
 
             // DbContext for the Crash Data  
             services.AddDbContext<CrashDbContext>(options =>
-            { options.UseMySql(Configuration["ConnectionStrings:CrashDataDbConnection"]);
+            {
+                options.UseMySql(Configuration["ConnectionStrings:CrashDataDbConnection"]);
             });
 
             // DbContext for Identity 
@@ -69,7 +70,7 @@ namespace INTEX2
             {
                 app.UseDeveloperExceptionPage();
             }
-           
+
             app.UseStaticFiles();
             app.UseRouting();
 

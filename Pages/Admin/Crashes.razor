@@ -188,7 +188,7 @@
         </tbody>
     </table>
 
-    
+
     <br />
     <div class="float-right">
         <button class="btn btn-outline-primary" @onclick="@First">Page 1</button>
@@ -199,303 +199,303 @@
     </div>
 </div>
 
-    @code {
+@code {
 
-        public ICrashRepository repo => Service;
-        public IEnumerable<Crash> CrashData { get; set; }
-        private int totalPages;
-        private int pageSize = 25;
-        private int pageNum = 1;
-        public IEnumerable<string> Cities { get; set; }
-        public IEnumerable<string> Counties { get; set; }
-        private DateTime StartDate { get; set; } = new DateTime();
-        private DateTime EndDate { get; set; } = DateTime.Now;
-        private string City { get; set; }
-        private string County { get; set; }
-        private int CrashSeverity { get; set; }
-        private bool PedestrianInvolved { get; set; }
-        private bool BicyclistInvolved { get; set; }
-        private bool MotorcycleInvolved { get; set; }
-        private bool ImproperRestraint { get; set; }
-        private bool Unrestrained { get; set; }
-        private bool DUI { get; set; }
-        private bool IntersectionRelated { get; set; }
-        private bool WildAnimalRelated { get; set; }
-        private bool DomesticAnimalRelated { get; set; }
-        private bool OverturnRollover { get; set; }
-        private bool CommercialMotorVehInvolved { get; set; }
-        private bool TeenageDriverInvolved { get; set; }
-        private bool OlderDriverInvolved { get; set; }
-        private bool NightDarkCondition { get; set; }
-        private bool SingleVehicle { get; set; }
-        private bool DistractedDriving { get; set; }
-        private bool DrowsyDriving { get; set; }
-        private bool RoadwayDeparture { get; set; }
+    public ICrashRepository repo => Service;
+    public IEnumerable<Crash> CrashData { get; set; }
+    private int totalPages;
+    private int pageSize = 25;
+    private int pageNum = 1;
+    public IEnumerable<string> Cities { get; set; }
+    public IEnumerable<string> Counties { get; set; }
+    private DateTime StartDate { get; set; } = new DateTime();
+    private DateTime EndDate { get; set; } = DateTime.Now;
+    private string City { get; set; }
+    private string County { get; set; }
+    private int CrashSeverity { get; set; }
+    private bool PedestrianInvolved { get; set; }
+    private bool BicyclistInvolved { get; set; }
+    private bool MotorcycleInvolved { get; set; }
+    private bool ImproperRestraint { get; set; }
+    private bool Unrestrained { get; set; }
+    private bool DUI { get; set; }
+    private bool IntersectionRelated { get; set; }
+    private bool WildAnimalRelated { get; set; }
+    private bool DomesticAnimalRelated { get; set; }
+    private bool OverturnRollover { get; set; }
+    private bool CommercialMotorVehInvolved { get; set; }
+    private bool TeenageDriverInvolved { get; set; }
+    private bool OlderDriverInvolved { get; set; }
+    private bool NightDarkCondition { get; set; }
+    private bool SingleVehicle { get; set; }
+    private bool DistractedDriving { get; set; }
+    private bool DrowsyDriving { get; set; }
+    private bool RoadwayDeparture { get; set; }
 
-        protected async override Task OnInitializedAsync()
-        {
-            await UpdateData();
-            await GetLists();
-        }
+    protected async override Task OnInitializedAsync()
+    {
+        await UpdateData();
+        await GetLists();
+    }
 
-        public async Task UpdateData()
-        {
-            CrashData = await repo.Crashes
-                .Where(c => c.CRASH_DATETIME > StartDate || StartDate == null)
-                .Where(c => c.CRASH_DATETIME < EndDate || EndDate == null)
-                .Where(c => c.CITY == City || City == null)
-                .Where(c => c.COUNTY_NAME == County || County == null)
-                .Where(c => c.CRASH_SEVERITY_ID == CrashSeverity || CrashSeverity == 0)
-                .Where(c => c.PEDESTRIAN_INVOLVED == PedestrianInvolved || PedestrianInvolved == false)
-                .Where(c => c.BICYCLIST_INVOLVED == BicyclistInvolved || BicyclistInvolved == false)
-                .Where(c => c.MOTORCYCLE_INVOLVED == MotorcycleInvolved || MotorcycleInvolved == false)
-                .Where(c => c.IMPROPER_RESTRAINT == ImproperRestraint || ImproperRestraint == false)
-                .Where(c => c.UNRESTRAINED == Unrestrained || Unrestrained == false)
-                .Where(c => c.DUI == DUI || DUI == false)
-                .Where(c => c.INTERSECTION_RELATED == IntersectionRelated || IntersectionRelated == false)
-                .Where(c => c.WILD_ANIMAL_RELATED == WildAnimalRelated || WildAnimalRelated == false)
-                .Where(c => c.DOMESTIC_ANIMAL_RELATED == DomesticAnimalRelated || DomesticAnimalRelated == false)
-                .Where(c => c.OVERTURN_ROLLOVER == OverturnRollover || OverturnRollover == false)
-                .Where(c => c.COMMERCIAL_MOTOR_VEH_INVOLVED == CommercialMotorVehInvolved || CommercialMotorVehInvolved == false)
-                .Where(c => c.TEENAGE_DRIVER_INVOLVED == TeenageDriverInvolved || TeenageDriverInvolved == false)
-                .Where(c => c.OLDER_DRIVER_INVOLVED == OlderDriverInvolved || OlderDriverInvolved == false)
-                .Where(c => c.NIGHT_DARK_CONDITION == NightDarkCondition || NightDarkCondition == false)
-                .Where(c => c.SINGLE_VEHICLE == SingleVehicle || SingleVehicle == false)
-                .Where(c => c.DISTRACTED_DRIVING == DistractedDriving || DistractedDriving == false)
-                .Where(c => c.DROWSY_DRIVING == DrowsyDriving || DrowsyDriving == false)
-                .Where(c => c.ROADWAY_DEPARTURE == RoadwayDeparture || RoadwayDeparture == false)
-                .Skip((pageNum - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-            totalPages = (int)Math.Ceiling((double)repo.Crashes
-                .Where(c => c.CRASH_DATETIME > StartDate || StartDate == null)
-                .Where(c => c.CRASH_DATETIME < EndDate || EndDate == null)
-                .Where(c => c.CITY == City || City == null)
-                .Where(c => c.COUNTY_NAME == County || County == null)
-                .Where(c => c.CRASH_SEVERITY_ID == CrashSeverity || CrashSeverity == 0)
-                .Where(c => c.PEDESTRIAN_INVOLVED == PedestrianInvolved || PedestrianInvolved == false)
-                .Where(c => c.BICYCLIST_INVOLVED == BicyclistInvolved || BicyclistInvolved == false)
-                .Where(c => c.MOTORCYCLE_INVOLVED == MotorcycleInvolved || MotorcycleInvolved == false)
-                .Where(c => c.IMPROPER_RESTRAINT == ImproperRestraint || ImproperRestraint == false)
-                .Where(c => c.UNRESTRAINED == Unrestrained || Unrestrained == false)
-                .Where(c => c.DUI == DUI || DUI == false)
-                .Where(c => c.INTERSECTION_RELATED == IntersectionRelated || IntersectionRelated == false)
-                .Where(c => c.WILD_ANIMAL_RELATED == WildAnimalRelated || WildAnimalRelated == false)
-                .Where(c => c.DOMESTIC_ANIMAL_RELATED == DomesticAnimalRelated || DomesticAnimalRelated == false)
-                .Where(c => c.OVERTURN_ROLLOVER == OverturnRollover || OverturnRollover == false)
-                .Where(c => c.COMMERCIAL_MOTOR_VEH_INVOLVED == CommercialMotorVehInvolved || CommercialMotorVehInvolved == false)
-                .Where(c => c.TEENAGE_DRIVER_INVOLVED == TeenageDriverInvolved || TeenageDriverInvolved == false)
-                .Where(c => c.OLDER_DRIVER_INVOLVED == OlderDriverInvolved || OlderDriverInvolved == false)
-                .Where(c => c.NIGHT_DARK_CONDITION == NightDarkCondition || NightDarkCondition == false)
-                .Where(c => c.SINGLE_VEHICLE == SingleVehicle || SingleVehicle == false)
-                .Where(c => c.DISTRACTED_DRIVING == DistractedDriving || DistractedDriving == false)
-                .Where(c => c.DROWSY_DRIVING == DrowsyDriving || DrowsyDriving == false)
-                .Where(c => c.ROADWAY_DEPARTURE == RoadwayDeparture || RoadwayDeparture == false).Count() / pageSize);
-        }
+    public async Task UpdateData()
+    {
+        CrashData = await repo.Crashes
+            .Where(c => c.CRASH_DATETIME > StartDate || StartDate == null)
+            .Where(c => c.CRASH_DATETIME < EndDate || EndDate == null)
+            .Where(c => c.CITY == City || City == null)
+            .Where(c => c.COUNTY_NAME == County || County == null)
+            .Where(c => c.CRASH_SEVERITY_ID == CrashSeverity || CrashSeverity == 0)
+            .Where(c => c.PEDESTRIAN_INVOLVED == PedestrianInvolved || PedestrianInvolved == false)
+            .Where(c => c.BICYCLIST_INVOLVED == BicyclistInvolved || BicyclistInvolved == false)
+            .Where(c => c.MOTORCYCLE_INVOLVED == MotorcycleInvolved || MotorcycleInvolved == false)
+            .Where(c => c.IMPROPER_RESTRAINT == ImproperRestraint || ImproperRestraint == false)
+            .Where(c => c.UNRESTRAINED == Unrestrained || Unrestrained == false)
+            .Where(c => c.DUI == DUI || DUI == false)
+            .Where(c => c.INTERSECTION_RELATED == IntersectionRelated || IntersectionRelated == false)
+            .Where(c => c.WILD_ANIMAL_RELATED == WildAnimalRelated || WildAnimalRelated == false)
+            .Where(c => c.DOMESTIC_ANIMAL_RELATED == DomesticAnimalRelated || DomesticAnimalRelated == false)
+            .Where(c => c.OVERTURN_ROLLOVER == OverturnRollover || OverturnRollover == false)
+            .Where(c => c.COMMERCIAL_MOTOR_VEH_INVOLVED == CommercialMotorVehInvolved || CommercialMotorVehInvolved == false)
+            .Where(c => c.TEENAGE_DRIVER_INVOLVED == TeenageDriverInvolved || TeenageDriverInvolved == false)
+            .Where(c => c.OLDER_DRIVER_INVOLVED == OlderDriverInvolved || OlderDriverInvolved == false)
+            .Where(c => c.NIGHT_DARK_CONDITION == NightDarkCondition || NightDarkCondition == false)
+            .Where(c => c.SINGLE_VEHICLE == SingleVehicle || SingleVehicle == false)
+            .Where(c => c.DISTRACTED_DRIVING == DistractedDriving || DistractedDriving == false)
+            .Where(c => c.DROWSY_DRIVING == DrowsyDriving || DrowsyDriving == false)
+            .Where(c => c.ROADWAY_DEPARTURE == RoadwayDeparture || RoadwayDeparture == false)
+            .Skip((pageNum - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        totalPages = (int)Math.Ceiling((double)repo.Crashes
+            .Where(c => c.CRASH_DATETIME > StartDate || StartDate == null)
+            .Where(c => c.CRASH_DATETIME < EndDate || EndDate == null)
+            .Where(c => c.CITY == City || City == null)
+            .Where(c => c.COUNTY_NAME == County || County == null)
+            .Where(c => c.CRASH_SEVERITY_ID == CrashSeverity || CrashSeverity == 0)
+            .Where(c => c.PEDESTRIAN_INVOLVED == PedestrianInvolved || PedestrianInvolved == false)
+            .Where(c => c.BICYCLIST_INVOLVED == BicyclistInvolved || BicyclistInvolved == false)
+            .Where(c => c.MOTORCYCLE_INVOLVED == MotorcycleInvolved || MotorcycleInvolved == false)
+            .Where(c => c.IMPROPER_RESTRAINT == ImproperRestraint || ImproperRestraint == false)
+            .Where(c => c.UNRESTRAINED == Unrestrained || Unrestrained == false)
+            .Where(c => c.DUI == DUI || DUI == false)
+            .Where(c => c.INTERSECTION_RELATED == IntersectionRelated || IntersectionRelated == false)
+            .Where(c => c.WILD_ANIMAL_RELATED == WildAnimalRelated || WildAnimalRelated == false)
+            .Where(c => c.DOMESTIC_ANIMAL_RELATED == DomesticAnimalRelated || DomesticAnimalRelated == false)
+            .Where(c => c.OVERTURN_ROLLOVER == OverturnRollover || OverturnRollover == false)
+            .Where(c => c.COMMERCIAL_MOTOR_VEH_INVOLVED == CommercialMotorVehInvolved || CommercialMotorVehInvolved == false)
+            .Where(c => c.TEENAGE_DRIVER_INVOLVED == TeenageDriverInvolved || TeenageDriverInvolved == false)
+            .Where(c => c.OLDER_DRIVER_INVOLVED == OlderDriverInvolved || OlderDriverInvolved == false)
+            .Where(c => c.NIGHT_DARK_CONDITION == NightDarkCondition || NightDarkCondition == false)
+            .Where(c => c.SINGLE_VEHICLE == SingleVehicle || SingleVehicle == false)
+            .Where(c => c.DISTRACTED_DRIVING == DistractedDriving || DistractedDriving == false)
+            .Where(c => c.DROWSY_DRIVING == DrowsyDriving || DrowsyDriving == false)
+            .Where(c => c.ROADWAY_DEPARTURE == RoadwayDeparture || RoadwayDeparture == false).Count() / pageSize);
+    }
 
-        public async Task UpdatePageSize(ChangeEventArgs args)
-        {
-            pageSize = Convert.ToInt32(args.Value);
-            await UpdateData();
-        }
+    public async Task UpdatePageSize(ChangeEventArgs args)
+    {
+        pageSize = Convert.ToInt32(args.Value);
+        await UpdateData();
+    }
 
-        public async Task UpdateStartDate(ChangeEventArgs args)
-        {
-            StartDate = Convert.ToDateTime(args.Value);
-            await UpdateData();
-
-        }
-
-        public async Task UpdateEndDate(ChangeEventArgs args)
-        {
-            EndDate = Convert.ToDateTime(args.Value);
-            await UpdateData();
-
-        }
-
-        public async Task UpdateCity(ChangeEventArgs args)
-        {
-            City = args.Value.ToString();
-            if (City == "all")
-            {
-                City = null;
-            }
-            await UpdateData();
-        }
-
-        public async Task UpdateCounty(ChangeEventArgs args)
-        {
-            County = args.Value.ToString();
-            if (County == "all")
-            {
-                County = null;
-            }
-            await UpdateData();
-        }
-
-        public async Task UpdateCrashSeverity(ChangeEventArgs args)
-        {
-            CrashSeverity = Convert.ToInt32(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdatePedestrianInvolved(ChangeEventArgs args)
-        {
-            PedestrianInvolved = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateBicyclistInvolved(ChangeEventArgs args)
-        {
-            BicyclistInvolved = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateMotorcycleInvolved(ChangeEventArgs args)
-        {
-            MotorcycleInvolved = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateImproperRestraint(ChangeEventArgs args)
-        {
-            ImproperRestraint = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateUnrestrained(ChangeEventArgs args)
-        {
-            Unrestrained = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateDUI(ChangeEventArgs args)
-        {
-            DUI = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateIntersectionRelated(ChangeEventArgs args)
-        {
-            IntersectionRelated = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateWildAnimalRelated(ChangeEventArgs args)
-        {
-            WildAnimalRelated = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateDomesticAnimalRelated(ChangeEventArgs args)
-        {
-            DomesticAnimalRelated = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateOverturnRollover(ChangeEventArgs args)
-        {
-            OverturnRollover = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateCommercialMotorVehInvolved(ChangeEventArgs args)
-        {
-            CommercialMotorVehInvolved = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateTeenageDriverInvolved(ChangeEventArgs args)
-        {
-            TeenageDriverInvolved = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateOlderDriverInvolved(ChangeEventArgs args)
-        {
-            OlderDriverInvolved = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateNightDarkCondition(ChangeEventArgs args)
-        {
-            NightDarkCondition = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateSingleVehicle(ChangeEventArgs args)
-        {
-            SingleVehicle = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateDistractedDriving(ChangeEventArgs args)
-        {
-            DistractedDriving = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateDrowsyDriving(ChangeEventArgs args)
-        {
-            DrowsyDriving = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task UpdateRoadwayDeparture(ChangeEventArgs args)
-        {
-            RoadwayDeparture = Convert.ToBoolean(args.Value);
-            await UpdateData();
-        }
-
-        public async Task GetLists()
-        {
-            Cities = await repo.Crashes.Select(c => c.CITY).Distinct().OrderBy(c => c).ToListAsync();
-            Counties = await repo.Crashes.Select(c => c.COUNTY_NAME).Distinct().OrderBy(c => c).ToListAsync();
-        }
-
-        public string GetDetailsUrl(long id) => $"/admin/crashes/details/{id}";
-        public string GetEditUrl(long id) => $"/admin/crashes/edit/{id}";
-
-        public async Task RemoveCrash(Crash c)
-        {
-            repo.DeleteCrash(c);
-            await UpdateData();
-        }
-
-        public async Task Next()
-        {
-            if (pageNum != totalPages)
-            {
-                pageNum = pageNum + 1;
-            }
-            await UpdateData();
-        }
-
-        public async Task Previous()
-        {
-            if (pageNum != 1)
-            {
-                pageNum = pageNum - 1;
-            }
-            await UpdateData();
-        }
-
-        public async Task First()
-        {
-            if (pageNum != 1)
-            {
-                pageNum = 1;
-            }
-            await UpdateData();
-        }
-
-        public async Task Last()
-        {
-            if (pageNum != totalPages)
-            {
-                pageNum = totalPages;
-            }
-            await UpdateData();
-        }
+    public async Task UpdateStartDate(ChangeEventArgs args)
+    {
+        StartDate = Convert.ToDateTime(args.Value);
+        await UpdateData();
 
     }
+
+    public async Task UpdateEndDate(ChangeEventArgs args)
+    {
+        EndDate = Convert.ToDateTime(args.Value);
+        await UpdateData();
+
+    }
+
+    public async Task UpdateCity(ChangeEventArgs args)
+    {
+        City = args.Value.ToString();
+        if (City == "all")
+        {
+            City = null;
+        }
+        await UpdateData();
+    }
+
+    public async Task UpdateCounty(ChangeEventArgs args)
+    {
+        County = args.Value.ToString();
+        if (County == "all")
+        {
+            County = null;
+        }
+        await UpdateData();
+    }
+
+    public async Task UpdateCrashSeverity(ChangeEventArgs args)
+    {
+        CrashSeverity = Convert.ToInt32(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdatePedestrianInvolved(ChangeEventArgs args)
+    {
+        PedestrianInvolved = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateBicyclistInvolved(ChangeEventArgs args)
+    {
+        BicyclistInvolved = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateMotorcycleInvolved(ChangeEventArgs args)
+    {
+        MotorcycleInvolved = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateImproperRestraint(ChangeEventArgs args)
+    {
+        ImproperRestraint = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateUnrestrained(ChangeEventArgs args)
+    {
+        Unrestrained = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateDUI(ChangeEventArgs args)
+    {
+        DUI = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateIntersectionRelated(ChangeEventArgs args)
+    {
+        IntersectionRelated = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateWildAnimalRelated(ChangeEventArgs args)
+    {
+        WildAnimalRelated = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateDomesticAnimalRelated(ChangeEventArgs args)
+    {
+        DomesticAnimalRelated = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateOverturnRollover(ChangeEventArgs args)
+    {
+        OverturnRollover = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateCommercialMotorVehInvolved(ChangeEventArgs args)
+    {
+        CommercialMotorVehInvolved = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateTeenageDriverInvolved(ChangeEventArgs args)
+    {
+        TeenageDriverInvolved = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateOlderDriverInvolved(ChangeEventArgs args)
+    {
+        OlderDriverInvolved = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateNightDarkCondition(ChangeEventArgs args)
+    {
+        NightDarkCondition = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateSingleVehicle(ChangeEventArgs args)
+    {
+        SingleVehicle = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateDistractedDriving(ChangeEventArgs args)
+    {
+        DistractedDriving = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateDrowsyDriving(ChangeEventArgs args)
+    {
+        DrowsyDriving = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task UpdateRoadwayDeparture(ChangeEventArgs args)
+    {
+        RoadwayDeparture = Convert.ToBoolean(args.Value);
+        await UpdateData();
+    }
+
+    public async Task GetLists()
+    {
+        Cities = await repo.Crashes.Select(c => c.CITY).Distinct().OrderBy(c => c).ToListAsync();
+        Counties = await repo.Crashes.Select(c => c.COUNTY_NAME).Distinct().OrderBy(c => c).ToListAsync();
+    }
+
+    public string GetDetailsUrl(long id) => $"/admin/crashes/details/{id}";
+    public string GetEditUrl(long id) => $"/admin/crashes/edit/{id}";
+
+    public async Task RemoveCrash(Crash c)
+    {
+        repo.DeleteCrash(c);
+        await UpdateData();
+    }
+
+    public async Task Next()
+    {
+        if (pageNum != totalPages)
+        {
+            pageNum = pageNum + 1;
+        }
+        await UpdateData();
+    }
+
+    public async Task Previous()
+    {
+        if (pageNum != 1)
+        {
+            pageNum = pageNum - 1;
+        }
+        await UpdateData();
+    }
+
+    public async Task First()
+    {
+        if (pageNum != 1)
+        {
+            pageNum = 1;
+        }
+        await UpdateData();
+    }
+
+    public async Task Last()
+    {
+        if (pageNum != totalPages)
+        {
+            pageNum = totalPages;
+        }
+        await UpdateData();
+    }
+
+}

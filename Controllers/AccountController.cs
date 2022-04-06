@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace INTEX2.Controllers
 {
-    
+
     public class AccountController : Controller
     {
         private UserManager<IdentityUser> userManager;
