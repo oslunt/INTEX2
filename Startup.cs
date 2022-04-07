@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.ML.OnnxRuntime;
 using System.Net;
 
 namespace INTEX2
@@ -40,6 +41,37 @@ namespace INTEX2
                 // requires using Microsoft.AspNetCore.Http;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
+
+            //onnx stuff. Put onnx model in main directory like sqlite. 
+            services.AddSingleton<InferenceSession>(
+                new InferenceSession("final_model2.onnx"));
+
+
+            // Google login ability 
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+            })
+                //.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/account/google-login";
+                })
+                .AddGoogle(options =>
+                {
+                    IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+
+                    // ID and ClientSecret from Ben's Google dev account.
+                    options.ClientId = "800903118366-iu0bvkiq52girde4a529lbbsfhiaid2c.apps.googleusercontent.com";
+                    options.ClientSecret = "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";
+
+                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                });
 
             // DbContext for the Crash Data  
             services.AddDbContext<CrashDbContext>(options =>
