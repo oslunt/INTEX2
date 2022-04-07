@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace AuthenticationLab.Areas.Identity.Pages.Account.Manage
+namespace INTEX2.Areas.Identity.Pages.Account.Manage
 {
     public static class ManageNavPages
     {

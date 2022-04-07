@@ -32,18 +32,13 @@ namespace INTEX2
         public void ConfigureServices(IServiceCollection services)
 
         {
-            services.ConfigureApplicationCookie(options =>
+            services.Configure<CookiePolicyOptions>(options =>
             {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                //options.Cookie.Expiration 
-
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-                options.LoginPath = "/Identity/Account/Login";
-                options.LogoutPath = "/Identity/Account/Logout";
-                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-                options.SlidingExpiration = true;
-                //options.ReturnUrlParameter=""
+                // This lambda determines whether user consent for non-essential 
+                // cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                // requires using Microsoft.AspNetCore.Http;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
             services.AddRazorPages();
@@ -87,19 +82,11 @@ namespace INTEX2
             {
                 options.UseMySql(Configuration["ConnectionStrings:IdentityDbConnection"]);
             });
+            //services.AddIdentity<IdentityUser, IdentityRole>()
+            //    .AddEntityFrameworkStores<AppIdentityDbContext>();
 
-            // Setting up Identity in ASP.NET Identity Core
-            services.AddIdentity<IdentityUser, IdentityRole>(options => {
-                options.SignIn.RequireConfirmedAccount = false;
-
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 1;
-            }).AddEntityFrameworkStores<AppIdentityDbContext>();
-
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<AppIdentityDbContext>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -113,16 +100,15 @@ namespace INTEX2
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
            
             app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseCookiePolicy();
-
             app.UseAuthorization();
+
+            app.UseCookiePolicy();
 
             app.UseEndpoints(endpoints =>
             {
@@ -141,6 +127,8 @@ namespace INTEX2
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/admin/{*catchall}", "/admin/Index");
                 endpoints.MapFallbackToPage("/display/{*catchall}", "/display/Index2");
+
+                IdentitySeedData.EnsurePopulated(app);
             });
         }
     }
