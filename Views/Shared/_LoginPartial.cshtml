@@ -6,11 +6,15 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
+            <a class="nav-link text-danger" href="/admin">Admin</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
         </li>
         <li class="nav-item">
             <a class="nav-link btn btn-link text-dark" href="/account/logout">Logout</a>
         </li>
+        
     }
     else
     {

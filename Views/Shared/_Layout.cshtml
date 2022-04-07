@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +16,7 @@
         }
     </style>
 </head>
-<body style="background-image: url(../../wwwroot/img/road.jpg) " >
+<body style="background-image: url(../../wwwroot/img/road.jpg) ">
     <header>
         <nav class="navbar navbar-expand navbar-toggleable navbar-light border-bottom shadow mb-3">
             <div class="container">
@@ -32,22 +35,19 @@
                             <a class="nav-link text-dark" href="/display">View Crash Data</a>
                         </li>
                         <li class="nav-item">
-
                             <a class="nav-link text-dark" asp-area="" asp-controller="Inference" asp-action="EnterData">Calculator</a>
-                      </li>
-                      <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Tableau">Data Insights</a>
-
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Tableau">Data Insights</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
         <br />
     </header>
-    <div class="container" >
-        
+    <div class="container">
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
