@@ -41,37 +41,10 @@ namespace INTEX2
                 // requires using Microsoft.AspNetCore.Http;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-            services.AddRazorPages();
-            services.AddServerSideBlazor();
-
+            
             //onnx stuff. Put onnx model in main directory like sqlite. 
             services.AddSingleton<InferenceSession>(
                 new InferenceSession("final_model2.onnx"));
-
-
-            // Google login ability 
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-
-            })
-                //.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/account/google-login";
-                })
-                .AddGoogle(options =>
-                {
-                    IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
-
-                    // ID and ClientSecret from Ben's Google dev account.
-                    options.ClientId = "800903118366-iu0bvkiq52girde4a529lbbsfhiaid2c.apps.googleusercontent.com";
-                    options.ClientSecret = "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";
-
-                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                });
 
             // DbContext for the Crash Data  
             services.AddDbContext<CrashDbContext>(options =>
@@ -94,9 +67,17 @@ namespace INTEX2
             });
 
             services.AddControllersWithViews();
+            services.AddHsts(options =>
+            {
+                options.Preload = true;
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromDays(365);
+            });
             services.AddRazorPages();
             services.AddScoped<ICrashRepository, EFCrashRepository>();
             services.AddServerSideBlazor();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -112,8 +93,15 @@ namespace INTEX2
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
+
+            app.Use(async (ctx, next) =>
+            {
+                ctx.Response.Headers.Add("Content-Security-Policy",
+                "default-src 'self'; style-src * 'unsafe-inline'; frame-src *; font-src *; script-src * 'unsafe-inline' 'unsafe-eval';");
+                await next();
+            });
 
             app.UseStaticFiles();
             app.UseRouting();
