@@ -134,39 +134,5 @@
         <label asp-for="county_name_Other">No</label>
         <input type="radio" value="0" asp-for="county_name_Other" />
     </div>
-
-    @*<div>
-            <label>County</label>
-            <select asp-for="county_name_Other">
-                <option value="1">Other</option>
-                <option value="2">Salt Lake County</option>
-                <option value="3">Utah County</option>
-                <option value="4">Weber County</option>
-            </select>
-        </div>
-
-        @{
-            if (Model.county_name_Other == 2)
-            {
-                Model.county_name_Salt_Lake = 1;
-                Model.county_name_Other = 0;
-            }
-            else if (Model.county_name_Other == 3)
-            {
-                Model.county_name_UTAH = 1;
-                Model.county_name_Other = 0;
-            }
-            else if (Model.county_name_Other == 4)
-            {
-                Model.county_name_Weber = 1;
-                Model.county_name_Other = 0;
-            }
-            else { Model.county_name_Other = 1; }
-        }*@
-
-    @*<div><label>County Name Other</label><input asp-for="county_name_Other" value="0" /></div>
-        <div><label>County Name Salt Lake</label><input asp-for="county_name_Salt_Lake" value="0" /></div>
-        <div><label>County Name Utah</label><input asp-for="county_name_UTAH" value="0" /></div>
-        <div><label>County Name Weber</label><input asp-for="county_name_Weber" value="0" /></div>*@
     <button type="submit">Calculate</button>
 </form>

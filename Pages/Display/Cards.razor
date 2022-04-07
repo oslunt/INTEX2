@@ -1,6 +1,7 @@
 ﻿@page "/display/crashes"
 @page "/display"
 @inherits OwningComponentBase<ICrashRepository>
+@inject InferenceSession session
 
 <div class="col-3">
 
@@ -50,7 +51,7 @@
     <div class="form-group">
         <label>Crash Severity</label>
         <select class="form-control" @onchange="@UpdateCrashSeverity">
-            <option value="">All</option>
+            <option value="0">All</option>
             <option value="1">No injury/PDO</option>
             <option value="2">Possible injury</option>
             <option value="3">Suspected Minor Injury</option>
@@ -142,6 +143,7 @@
             <option value="75">75</option>
             <option value="100">100</option>
         </select>
+        <p class="float-right">Predicted Crash Severity: @predictedVal</p>
     </div>
 
     <h2>Utah Crash Data</h2>
@@ -199,6 +201,10 @@
 
     public ICrashRepository repo => Service;
     public IEnumerable<Crash> CrashData { get; set; }
+    public Crash_pred data { get; set; } = new Crash_pred();
+    public Prediction prediction { get; set; }
+    public string predictedVal { get; set; } = "No Injury/PDO";
+
     private int totalPages;
     private int pageSize = 25;
     private int pageNum = 1;
@@ -293,6 +299,62 @@
             .Where(c => c.DISTRACTED_DRIVING == DistractedDriving || DistractedDriving == false)
             .Where(c => c.DROWSY_DRIVING == DrowsyDriving || DrowsyDriving == false)
             .Where(c => c.ROADWAY_DEPARTURE == RoadwayDeparture || RoadwayDeparture == false).Count() / pageSize);
+
+        var result = session.Run(new List<NamedOnnxValue>
+            {
+                NamedOnnxValue.CreateFromTensor("float_input", data.AsTensor())
+            });
+
+        Tensor<string> score = result.First().AsTensor<string>();
+        prediction = new Prediction { PredictedValue = score.Last() };
+
+        if (prediction.PredictedValue == "1")
+        {
+            predictedVal = "No Injury/PDO";
+        }
+        else if (prediction.PredictedValue == "2")
+        {
+            predictedVal = "Possible Injury";
+        }
+        else if (prediction.PredictedValue == "3")
+        {
+            predictedVal = "Suspected Minor Injury";
+        }
+        else if (prediction.PredictedValue == "4")
+        {
+            predictedVal = "Suspected Serious Injury";
+        }
+        else
+        {
+            predictedVal = "Fatal";
+        }
+
+        if (CrashSeverity == 0)
+        {
+            predictedVal = predictedVal;
+        }
+        else if (CrashSeverity == 1)
+        {
+            predictedVal = "No Injury/PDO";
+        }
+        else if (CrashSeverity == 2)
+        {
+            predictedVal = "Possible Injury";
+        }
+        else if (CrashSeverity == 3)
+        {
+            predictedVal = "Suspected Minor Injury";
+        }
+        else if (CrashSeverity == 4)
+        {
+            predictedVal = "Suspected Serious Injury";
+        }
+        else
+        {
+            predictedVal = "Fatal";
+        }
+
+        result.Dispose();
     }
 
     public async Task UpdatePageSize(ChangeEventArgs args)
@@ -321,6 +383,27 @@
         if (City == "all")
         {
             City = null;
+            data.city_Salt_Lake_City = 0;
+            data.city_Other = 0;
+            data.city_West_Valley_City = 0;
+        }
+        else if (City == "SALT LAKE CITY")
+        {
+            data.city_Salt_Lake_City = 1;
+            data.city_Other = 0;
+            data.city_West_Valley_City = 0;
+        }
+        else if (City == "WEST VALLEY CITY")
+        {
+            data.city_Salt_Lake_City = 0;
+            data.city_Other = 0;
+            data.city_West_Valley_City = 1;
+        }
+        else
+        {
+            data.city_Salt_Lake_City = 0;
+            data.city_Other = 1;
+            data.city_West_Valley_City = 0;
         }
         await UpdateData();
     }
@@ -331,6 +414,38 @@
         if (County == "all")
         {
             County = null;
+            data.county_name_Salt_Lake = 0;
+            data.county_name_UTAH = 0;
+            data.county_name_Weber = 0;
+            data.county_name_Other = 0;
+        }
+        else if (County == "SALT LAKE")
+        {
+            data.county_name_Salt_Lake = 1;
+            data.county_name_UTAH = 0;
+            data.county_name_Weber = 0;
+            data.county_name_Other = 0;
+        }
+        else if (County == "UTAH")
+        {
+            data.county_name_Salt_Lake = 0;
+            data.county_name_UTAH = 1;
+            data.county_name_Weber = 0;
+            data.county_name_Other = 0;
+        }
+        else if (County == "WEBER")
+        {
+            data.county_name_Salt_Lake = 0;
+            data.county_name_UTAH = 0;
+            data.county_name_Weber = 1;
+            data.county_name_Other = 0;
+        }
+        else
+        {
+            data.county_name_Salt_Lake = 0;
+            data.county_name_UTAH = 0;
+            data.county_name_Weber = 0;
+            data.county_name_Other = 1;
         }
         await UpdateData();
     }
@@ -380,6 +495,14 @@
     public async Task UpdateIntersectionRelated(ChangeEventArgs args)
     {
         IntersectionRelated = Convert.ToBoolean(args.Value);
+        if (IntersectionRelated)
+        {
+            data.intersection_related = 1;
+        }
+        else
+        {
+            data.intersection_related = 0;
+        }
         await UpdateData();
     }
 
@@ -404,36 +527,84 @@
     public async Task UpdateCommercialMotorVehInvolved(ChangeEventArgs args)
     {
         CommercialMotorVehInvolved = Convert.ToBoolean(args.Value);
+        if (CommercialMotorVehInvolved)
+        {
+            data.commercial_motor_veh_involved = 1;
+        }
+        else
+        {
+            data.commercial_motor_veh_involved = 0;
+        }
         await UpdateData();
     }
 
     public async Task UpdateTeenageDriverInvolved(ChangeEventArgs args)
     {
         TeenageDriverInvolved = Convert.ToBoolean(args.Value);
+        if (TeenageDriverInvolved)
+        {
+            data.teenage_driver_involved = 1;
+        }
+        else
+        {
+            data.teenage_driver_involved = 0;
+        }
         await UpdateData();
     }
 
     public async Task UpdateOlderDriverInvolved(ChangeEventArgs args)
     {
         OlderDriverInvolved = Convert.ToBoolean(args.Value);
+        if (OlderDriverInvolved)
+        {
+            data.older_driver_involved = 1;
+        }
+        else
+        {
+            data.older_driver_involved = 0;
+        }
         await UpdateData();
     }
 
     public async Task UpdateNightDarkCondition(ChangeEventArgs args)
     {
         NightDarkCondition = Convert.ToBoolean(args.Value);
+        if (NightDarkCondition)
+        {
+            data.night_dark_condition = 1;
+        }
+        else
+        {
+            data.night_dark_condition = 0;
+        }
         await UpdateData();
     }
 
     public async Task UpdateSingleVehicle(ChangeEventArgs args)
     {
         SingleVehicle = Convert.ToBoolean(args.Value);
+        if (SingleVehicle)
+        {
+            data.single_vehicle = 1;
+        }
+        else
+        {
+            data.single_vehicle = 0;
+        }
         await UpdateData();
     }
 
     public async Task UpdateDistractedDriving(ChangeEventArgs args)
     {
         DistractedDriving = Convert.ToBoolean(args.Value);
+        if (DistractedDriving)
+        {
+            data.distracted_driving = 1;
+        }
+        else
+        {
+            data.distracted_driving = 0;
+        }
         await UpdateData();
     }
 
@@ -446,6 +617,14 @@
     public async Task UpdateRoadwayDeparture(ChangeEventArgs args)
     {
         RoadwayDeparture = Convert.ToBoolean(args.Value);
+        if (RoadwayDeparture)
+        {
+            data.roadway_departure = 1;
+        }
+        else
+        {
+            data.roadway_departure = 0;
+        }
         await UpdateData();
     }
 

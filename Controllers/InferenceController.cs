@@ -17,13 +17,11 @@ namespace INTEX2.Controllers
     {
 
         private InferenceSession _session;
+
         public InferenceController(InferenceSession session)
         {
             _session = session;
         }
-
-
-
 
         [HttpGet]
         public IActionResult EnterData()
