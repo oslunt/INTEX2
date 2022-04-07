@@ -36,7 +36,7 @@ namespace INTEX2.Controllers
         {
             var result = _session.Run(new List<NamedOnnxValue>
             {
-                NamedOnnxValue.CreateFromTensor("float_input", data.asTensor())
+                NamedOnnxValue.CreateFromTensor("float_input", data.AsTensor())
             });
 
             Tensor<string> score = result.First().AsTensor<string>();

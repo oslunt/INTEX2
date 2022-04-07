@@ -9,8 +9,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        body {
+            background-image: url(../../wwwroot/img/road.jpg);
+        }
+    </style>
 </head>
-<body style="background-image: url('https://besthqwallpapers.com/Uploads/28-2-2021/157883/4k-black-asphalt-background-black-stones-grunge-backgrounds-black-asphalt.jpg');">
+<body style="background-image: url(../../wwwroot/img/road.jpg) " >
     <header>
         <nav class="navbar navbar-expand navbar-toggleable navbar-light border-bottom shadow mb-3">
             <div class="container">
@@ -38,7 +43,7 @@
         </nav>
         <br />
     </header>
-    <div class="container">
+    <div class="container" >
         
         <main role="main" class="pb-3">
             @RenderBody()
