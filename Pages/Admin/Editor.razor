@@ -73,14 +73,14 @@
         <div class="form-group">
             <label>Severity:</label>
             <ValidationMessage For="@(() => c.CRASH_SEVERITY_ID)"></ValidationMessage>
-            <InputSelect class="form-control" @bind-Value="c.CRASH_SEVERITY_ID">
+            <select class="form-control" @onchange="UpdateCrashSeverity">
                 <option value="1">Select a Crash Severity</option>
                 <option value="1">No injury/PDO</option>
                 <option value="2">Possible injury</option>
                 <option value="3">Suspected Minor Injury</option>
                 <option value="4">Suspected Serious Injury</option>
                 <option value="5">Fatal</option>
-            </InputSelect>
+            </select>
         </div>
 
         <table class="text-center">
@@ -272,7 +272,7 @@
         </table>
 
         <div class="container-fluid">
-            <button type="submit" class="btn btn-@ThemeColor">Save</button>
+            <button @onclick="@SaveCrash" class="btn btn-@ThemeColor">Save</button>
             <NavLink class="btn btn-secondary" href="/admin/crashes">Cancel</NavLink>
         </div>
     </EditForm>
@@ -302,6 +302,7 @@
             }
             else
             {
+                c = new Crash();
                 c.CRASH_DATETIME = Convert.ToDateTime("2016-01-01T00:00");
             }
         }
@@ -328,5 +329,10 @@
         {
             string t = args.Value.ToString();
             time = TimeSpan.Parse(t);
+        }
+
+        public async Task UpdateCrashSeverity(ChangeEventArgs args)
+        {
+            c.CRASH_SEVERITY_ID = Convert.ToInt32(args.Value);
         }
     }
