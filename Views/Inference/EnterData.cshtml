@@ -1,172 +1,174 @@
 ﻿@{
-    ViewData["Title"] = "Predict Crash Input";
+ViewData["Title"] = "Predict Crash Input";
 }
 
 @model Crash_pred
 
+<div class="container shadow-lg text-center rounded">
+    <h1>Crash Severity Predictor</h1>
+    <h5>Enter Crash Information Below</h5>
+    <br />
+</div>
+<br />
+<br />
+
 <form method="post" asp-controller="Inference" asp-action="Score">
+    <div class="container">
+        <div class="row">
+            <div class="col-3 grid container shadow-lg rounded">
+                <h4>City and County Information</h4>
+                <div>
+                    <h6>Was it in Salt Lake City?</h6>
+                    <label asp-for="city_Salt_Lake_City">Yes</label>
+                    <input type="radio" value="1" asp-for="city_Salt_Lake_City" />
+                    <label asp-for="city_Salt_Lake_City">No</label>
+                    <input type="radio" value="0" asp-for="city_Salt_Lake_City" />
+                </div>
 
-    <!--Adjust for the models features -->
-    <div>
-        <label asp-for="intersection_related">Intersection Related:</label>
-        <select asp-for="intersection_related">
-            <option value="1">Yes</option>
-            <option value="0">No</option>
-        </select>
-    </div>
+                <div>
+                    <h6>Was it in West Valley City?</h6>
+                    <label asp-for="city_West_Valley_City">Yes</label>
+                    <input type="radio" value="1" asp-for="city_West_Valley_City" />
+                    <label asp-for="city_West_Valley_City">No</label>
+                    <input type="radio" value="0" asp-for="city_West_Valley_City" />
+                </div>
 
-    <div>
-        <label asp-for="intersection_related">Was it at anIntersection: Yes</label>
-        <input type="radio" value="1" asp-for="intersection_related" />
-        <label asp-for="intersection_related">No</label>
-        <input type="radio" value="0" asp-for="intersection_related" />
-    </div>
+                <div>
+                    <h6>Was it in any city not mentioned above?</h6>
+                    <label asp-for="city_Other">Yes</label>
+                    <input type="radio" value="1" asp-for="city_Other" />
+                    <label asp-for="city_Other">No</label>
+                    <input type="radio" value="0" asp-for="city_Other" />
+                </div>
+                <br />
 
-    <div>
-        <label asp-for="commercial_motor_veh_involved">Was a commercial vehicle involved: Yes</label>
-        <input type="radio" value="1" asp-for="commercial_motor_veh_involved" />
-        <label asp-for="commercial_motor_veh_involved">No</label>
-        <input type="radio" value="0" asp-for="commercial_motor_veh_involved" />
-    </div>
+                <div>
+                    <h6>Was it in Salt Lake County?</h6>
+                    <label asp-for="county_name_Salt_Lake">Yes</label>
+                    <input type="radio" value="1" asp-for="county_name_Salt_Lake" />
+                    <label asp-for="county_name_Salt_Lake">No</label>
+                    <input type="radio" value="0" asp-for="county_name_Salt_Lake" />
+                </div>
 
-    <div>
-        <label asp-for="teenage_driver_involved">Was a teenage driver tnvolved: Yes</label>
-        <input type="radio" value="1" asp-for="teenage_driver_involved" />
-        <label asp-for="teenage_driver_involved">No</label>
-        <input type="radio" value="0" asp-for="teenage_driver_involved" />
-    </div>
+                <div>
+                    <h6>Was it in Weber County?</h6>
+                    <label asp-for="county_name_Weber">Yes</label>
+                    <input type="radio" value="1" asp-for="county_name_Weber" />
+                    <label asp-for="county_name_Weber">No</label>
+                    <input type="radio" value="0" asp-for="county_name_Weber" />
+                </div>
 
-    <div>
-        <label asp-for="older_driver_involved"> Was an older driver involved: Yes</label>
-        <input type="radio" value="1" asp-for="older_driver_involved" />
-        <label asp-for="older_driver_involved">No</label>
-        <input type="radio" value="0" asp-for="older_driver_involved" />
-    </div>
+                <div>
+                    <h6>Was it in Utah County?</h6>
+                    <label asp-for="county_name_UTAH">Yes</label>
+                    <input type="radio" value="1" asp-for="county_name_UTAH" />
+                    <label asp-for="county_name_UTAH">No</label>
+                    <input type="radio" value="0" asp-for="county_name_UTAH" />
+                </div>
 
-    <div>
-        <label asp-for="night_dark_condition"> Was it at night: Yes</label>
-        <input type="radio" value="1" asp-for="night_dark_condition" />
-        <label asp-for="night_dark_condition">No</label>
-        <input type="radio" value="0" asp-for="night_dark_condition" />
-    </div>
+                <div>
+                    <h6>Was it in any county not mentioned above?</h6>
+                    <label asp-for="county_name_Other">Yes</label>
+                    <input type="radio" value="1" asp-for="county_name_Other" />
+                    <label asp-for="county_name_Other">No</label>
+                    <input type="radio" value="0" asp-for="county_name_Other" />
+                </div>
+            </div>
 
-    <div>
-        <label asp-for="single_vehicle"> Single or Multiple Vehicles: Single</label>
-        <input type="radio" value="1" asp-for="single_vehicle" />
-        <label asp-for="single_vehicle">Many</label>
-        <input type="radio" value="0" asp-for="single_vehicle" />
-    </div>
+            <div class="col-3 grid container shadow-lg rounded">
+                <h3>Driving Conditions</h3>
 
-    <div>
-        <label asp-for="distracted_driving"> Was the driver distracted: Yes</label>
-        <input type="radio" value="1" asp-for="distracted_driving" />
-        <label asp-for="distracted_driving">No</label>
-        <input type="radio" value="0" asp-for="distracted_driving" />
-    </div>
+                <div>
+                    <h6>Was it at night?</h6>
+                    <label asp-for="night_dark_condition">Yes</label>
+                    <input type="radio" value="1" asp-for="night_dark_condition" />
+                    <label asp-for="night_dark_condition">No</label>
+                    <input type="radio" value="0" asp-for="night_dark_condition" />
+                </div>
 
-    <div>
-        <label asp-for="roadway_departure"> Was it at an exit: Yes</label>
-        <input type="radio" value="1" asp-for="roadway_departure" />
-        <label asp-for="roadway_departure">No</label>
-        <input type="radio" value="0" asp-for="roadway_departure" />
-    </div>
+                <div>
+                    <h6>Single or Multiple Vehicles?</h6>
+                    <label asp-for="single_vehicle">Single</label>
+                    <input type="radio" value="1" asp-for="single_vehicle" />
+                    <label asp-for="single_vehicle">Many</label>
+                    <input type="radio" value="0" asp-for="single_vehicle" />
+                </div>
 
-    <div>
-        <label asp-for="route_89"> Was it at Route 89: Yes</label>
-        <input type="radio" value="1" asp-for="route_89" />
-        <label asp-for="route_89">No</label>
-        <input type="radio" value="0" asp-for="route_89" />
-    </div>
+                <div>
+                    <h6>Was it at an exit?</h6>
+                    <label asp-for="roadway_departure">Yes</label>
+                    <input type="radio" value="1" asp-for="roadway_departure" />
+                    <label asp-for="roadway_departure">No</label>
+                    <input type="radio" value="0" asp-for="roadway_departure" />
+                </div>
 
-    <div>
-        <input type="hidden" value="1" asp-for="route_Other" />
-    </div>
+                <div>
+                    <h6>Was it at Route 89?</h6>
+                    <label asp-for="route_89">Yes</label>
+                    <input type="radio" value="1" asp-for="route_89" />
+                    <label asp-for="route_89">No</label>
+                    <input type="radio" value="0" asp-for="route_89" />
+                </div>
+                <div>
+                    <h6>Was it at an intersection?</h6>
+                    <label asp-for="intersection_related">Yes</label>
+                    <input type="radio" value="1" asp-for="intersection_related" />
+                    <label asp-for="intersection_related">No</label>
+                    <input type="radio" value="0" asp-for="intersection_related" />
+                </div>
 
-    <div>
-        <input type="hidden" value="1" asp-for="main_road_name_Other" />
-    </div>
+                <div>
+                    <h6>Was a commercial vehicle involved?</h6>
+                    <label asp-for="commercial_motor_veh_involved">Yes</label>
+                    <input type="radio" value="1" asp-for="commercial_motor_veh_involved" />
+                    <label asp-for="commercial_motor_veh_involved">No</label>
+                    <input type="radio" value="0" asp-for="commercial_motor_veh_involved" />
+                </div>
 
-    <div>
-        <label asp-for="city_Salt_Lake_City"> Was it in Salt Lake City: Yes</label>
-        <input type="radio" value="1" asp-for="city_Salt_Lake_City" />
-        <label asp-for="city_Salt_Lake_City">No</label>
-        <input type="radio" value="0" asp-for="city_Salt_Lake_City" />
-    </div>
+                <div>
+                    <input type="hidden" value="1" asp-for="route_Other" />
+                </div>
 
-    <div>
-        <label asp-for="city_West_Valley_City"> Was it in West Valley City: Yes</label>
-        <input type="radio" value="1" asp-for="city_West_Valley_City" />
-        <label asp-for="city_West_Valley_City">No</label>
-        <input type="radio" value="0" asp-for="city_West_Valley_City" />
-    </div>
+                <div>
+                    <input type="hidden" value="1" asp-for="main_road_name_Other" />
+                </div>
+            </div>
 
-    <div>
-        <label asp-for="city_Other"> Was it in any city not mentioned above: Yes</label>
-        <input type="radio" value="1" asp-for="city_Other" />
-        <label asp-for="city_Other">No</label>
-        <input type="radio" value="0" asp-for="city_Other" />
-    </div>
+            <div class="col-3 grid container shadow-lg rounded">
+                <h3>Driver Information</h3>
+                <div>
+                    <h6>Was a teenage driver involved?</h6>
+                    <label asp-for="teenage_driver_involved">Yes</label>
+                    <input type="radio" value="1" asp-for="teenage_driver_involved" />
+                    <label asp-for="teenage_driver_involved">No</label>
+                    <input type="radio" value="0" asp-for="teenage_driver_involved" />
+                </div>
 
-    <div>
-        <label asp-for="county_name_Salt_Lake"> Was it in Salt Lake County: Yes</label>
-        <input type="radio" value="1" asp-for="county_name_Salt_Lake" />
-        <label asp-for="county_name_Salt_Lake">No</label>
-        <input type="radio" value="0" asp-for="county_name_Salt_Lake" />
-    </div>
+                <div>
+                    <h6>Was an older driver involved?</h6>
+                    <label asp-for="older_driver_involved">Yes</label>
+                    <input type="radio" value="1" asp-for="older_driver_involved" />
+                    <label asp-for="older_driver_involved">No</label>
+                    <input type="radio" value="0" asp-for="older_driver_involved" />
+                </div>
 
-    <div>
-        <label asp-for="county_name_Weber"> Was it in Weber County: Yes</label>
-        <input type="radio" value="1" asp-for="county_name_Weber" />
-        <label asp-for="county_name_Weber">No</label>
-        <input type="radio" value="0" asp-for="county_name_Weber" />
-    </div>
+                <div>
+                    <h6>Was the driver distracted?</h6>
+                    <label asp-for="distracted_driving">Yes</label>
+                    <input type="radio" value="1" asp-for="distracted_driving" />
+                    <label asp-for="distracted_driving">No</label>
+                    <input type="radio" value="0" asp-for="distracted_driving" />
+                </div>
 
-    <div>
-        <label asp-for="county_name_UTAH"> Was it in Utah County: Yes</label>
-        <input type="radio" value="1" asp-for="county_name_UTAH" />
-        <label asp-for="county_name_UTAH">No</label>
-        <input type="radio" value="0" asp-for="county_name_UTAH" />
-    </div>
+            </div>
 
-    <div>
-        <label asp-for="county_name_Other"> Was it in any county not mentioned above: Yes</label>
-        <input type="radio" value="1" asp-for="county_name_Other" />
-        <label asp-for="county_name_Other">No</label>
-        <input type="radio" value="0" asp-for="county_name_Other" />
-    </div>
+            <br />
 
-    @*<div>
-            <label>County</label>
-            <select asp-for="county_name_Other">
-                <option value="1">Other</option>
-                <option value="2">Salt Lake County</option>
-                <option value="3">Utah County</option>
-                <option value="4">Weber County</option>
-            </select>
+
         </div>
-
-        @{
-            if (Model.county_name_Other == 2)
-            {
-                Model.county_name_Salt_Lake = 1;
-                Model.county_name_Other = 0;
-            }
-            else if (Model.county_name_Other == 3)
-            {
-                Model.county_name_UTAH = 1;
-                Model.county_name_Other = 0;
-            }
-            else if (Model.county_name_Other == 4)
-            {
-                Model.county_name_Weber = 1;
-                Model.county_name_Other = 0;
-            }
-            else { Model.county_name_Other = 1; }
-        }*@
-
-    @*<div><label>County Name Other</label><input asp-for="county_name_Other" value="0" /></div>
-        <div><label>County Name Salt Lake</label><input asp-for="county_name_Salt_Lake" value="0" /></div>
-        <div><label>County Name Utah</label><input asp-for="county_name_UTAH" value="0" /></div>
-        <div><label>County Name Weber</label><input asp-for="county_name_Weber" value="0" /></div>*@
-    <button type="submit">Calculate</button>
+    </div>
+    <br />
+    <div class="container text-center">
+        <button class="btn btn-primary btn-lg shadow" type="submit">Calculate</button>
+    </div>
 </form>
