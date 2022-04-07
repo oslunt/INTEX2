@@ -14,7 +14,7 @@ namespace INTEX2.Models
         private const string adminUser = "admin";
         private const string adminPassword = "Admin123456!";
 
-        public static async void EnsurePopulated (IApplicationBuilder app)
+        public static async void EnsurePopulated(IApplicationBuilder app)
         {
             AppIdentityDbContext context = app.ApplicationServices
                 .CreateScope().ServiceProvider

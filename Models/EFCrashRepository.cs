@@ -17,7 +17,11 @@ namespace INTEX2.Models
 
         public void AddCrash(Crash c)
         {
-            context.Add(c);
+            if(c.CRASH_ID == 0)
+            {
+                c.CRASH_ID = context.Crashes.Max(c => c.CRASH_ID) + 1;
+                context.Crashes.Add(c);
+            }
             context.SaveChanges();
         }
 

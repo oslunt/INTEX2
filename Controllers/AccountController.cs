@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace INTEX2.Controllers
 {
-    
+
     public class AccountController : Controller
     {
         private UserManager<IdentityUser> userManager;
@@ -47,7 +47,7 @@ namespace INTEX2.Controllers
                     }
                 }
             }
-            ModelState.AddModelError("", "Invalide name or password");
+            ModelState.AddModelError("", "Invalid name or password");
             return View(loginModel);
         }
 

@@ -74,7 +74,8 @@ namespace INTEX2
 
             // DbContext for the Crash Data  
             services.AddDbContext<CrashDbContext>(options =>
-            { options.UseMySql(Configuration["ConnectionStrings:CrashDataDbConnection"]);
+            {
+                options.UseMySql(Configuration["ConnectionStrings:CrashDataDbConnection"]);
             });
 
             // DbContext for Identity 
@@ -82,11 +83,14 @@ namespace INTEX2
             {
                 options.UseMySql(Configuration["ConnectionStrings:IdentityDbConnection"]);
             });
-            //services.AddIdentity<IdentityUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<AppIdentityDbContext>();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AppIdentityDbContext>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequiredLength = 13;
+                options.Password.RequiredUniqueChars = 8;
+            });
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -101,7 +105,7 @@ namespace INTEX2
             {
                 app.UseDeveloperExceptionPage();
             }
-           
+
             app.UseStaticFiles();
             app.UseRouting();
 
@@ -128,7 +132,7 @@ namespace INTEX2
                 endpoints.MapFallbackToPage("/admin/{*catchall}", "/admin/Index");
                 endpoints.MapFallbackToPage("/display/{*catchall}", "/display/Index2");
 
-                IdentitySeedData.EnsurePopulated(app);
+                //IdentitySeedData.EnsurePopulated(app);
             });
         }
     }

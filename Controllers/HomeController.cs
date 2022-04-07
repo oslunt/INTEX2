@@ -25,6 +25,12 @@ namespace INTEX2.Controllers
         {
             return View();
         }
+
+        [AllowAnonymous]
+        public IActionResult Tableau()
+        {
+            return View();
+        }
         public IActionResult SignIn()
         {
             return View();
