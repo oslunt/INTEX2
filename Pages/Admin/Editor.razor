@@ -59,6 +59,40 @@
         </div>
 
         <div class="form-group">
+            <label>City</label>
+            <select class="form-control" @onchange="@UpdateCity">
+                @if (Cities?.Count() > 0)
+                {
+                    @foreach (string city in Cities)
+                    {
+                        <option value="@city">@city</option>
+                    }
+                }
+                else
+                {
+                    <option value="">Loading...</option>
+                }
+
+            </select>
+        </div>
+        <div class="form-group">
+            <label>County</label>
+            <select class="form-control" @onchange="@UpdateCounty">
+                @if (Counties?.Count() > 0)
+                {
+                    @foreach (string county in Counties)
+                    {
+                        <option value="@county">@county</option>
+                    }
+                }
+                else
+                {
+                    <option value="">Loading...</option>
+                }
+            </select>
+        </div>
+
+        @*<div class="form-group">
             <label>City:</label>
             <ValidationMessage For="@(() => c.CITY)"></ValidationMessage>
             <InputText class="form-control" @bind-Value="c.CITY"></InputText>
@@ -68,7 +102,7 @@
             <label>County:</label>
             <ValidationMessage For="@(() => c.COUNTY_NAME)"></ValidationMessage>
             <InputText class="form-control" @bind-Value="c.COUNTY_NAME"></InputText>
-        </div>
+        </div>*@
 
         <div class="form-group">
             <label>Severity:</label>
@@ -292,8 +326,10 @@
         public Crash c { get; set; } = new Crash();
 
         public ICrashRepository repo => Service;
+        public IEnumerable<string> Cities { get; set; }
+        public IEnumerable<string> Counties { get; set; }
 
-        protected override void OnParametersSet()
+        protected async override void OnParametersSet()
         {
             if (Id != 0)
             {
@@ -305,6 +341,14 @@
                 c = new Crash();
                 c.CRASH_DATETIME = Convert.ToDateTime("2016-01-01T00:00");
             }
+
+            await GetLists();
+        }
+
+        public async Task GetLists()
+        {
+            Cities = await repo.Crashes.Select(c => c.CITY).Distinct().OrderBy(c => c).ToListAsync();
+            Counties = await repo.Crashes.Select(c => c.COUNTY_NAME).Distinct().OrderBy(c => c).ToListAsync();
         }
 
         public void SaveCrash()
@@ -334,5 +378,15 @@
         public async Task UpdateCrashSeverity(ChangeEventArgs args)
         {
             c.CRASH_SEVERITY_ID = Convert.ToInt32(args.Value);
+        }
+
+        public async Task UpdateCity(ChangeEventArgs args)
+        {
+            c.CITY = args.Value.ToString();
+        }
+
+        public async Task UpdateCounty(ChangeEventArgs args)
+        {
+            c.COUNTY_NAME = args.Value.ToString();
         }
     }
