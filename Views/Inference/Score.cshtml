@@ -1,0 +1,30 @@
+﻿@{
+}
+@model Prediction
+
+@{
+    var x = "";
+
+    if (Model.PredictedValue == "1")
+    {
+        x = "No Injury/PDO";
+    }
+    else if (Model.PredictedValue == "2")
+    {
+        x = "Possible Injury";
+    }
+    else if (Model.PredictedValue == "3")
+    {
+        x = "Suspected Minor Injury";
+    }
+    else if (Model.PredictedValue == "4")
+    {
+        x = "Suspected Serious Injury";
+    }
+    else
+    {
+        x = "Fatal";
+    }
+}
+
+    <h1>The severity of this crash would be @x </h1>
