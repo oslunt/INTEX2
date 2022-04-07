@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ML.OnnxRuntime;
 using System.Net;
+using Microsoft.Extensions.Primitives;
 
 namespace INTEX2
 {
@@ -41,10 +42,10 @@ namespace INTEX2
                 // requires using Microsoft.AspNetCore.Http;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            
+
             //onnx stuff. Put onnx model in main directory like sqlite. 
             services.AddSingleton<InferenceSession>(
-                new InferenceSession("final_model2.onnx"));
+                new InferenceSession("wwwroot/final_model2.onnx"));
 
             // DbContext for the Crash Data  
             services.AddDbContext<CrashDbContext>(options =>
@@ -73,11 +74,18 @@ namespace INTEX2
                 options.IncludeSubDomains = true;
                 options.MaxAge = TimeSpan.FromDays(365);
             });
+
+            //services.AddHttpsRedirection(options =>
+            //{
+            //    options.RedirectStatusCode = StatusCodes.Status301MovedPermanently;
+            //    options.HttpsPort = 443;
+            //});
+
             services.AddRazorPages();
             services.AddScoped<ICrashRepository, EFCrashRepository>();
             services.AddServerSideBlazor();
 
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,8 +101,8 @@ namespace INTEX2
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
-            app.UseHttpsRedirection();
+
+            //app.UseHttpsRedirection();
 
             app.Use(async (ctx, next) =>
             {
@@ -105,6 +113,7 @@ namespace INTEX2
 
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseMiddleware<SecurityHeadersMiddleware>();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -129,6 +138,24 @@ namespace INTEX2
                 endpoints.MapFallbackToPage("/admin/{*catchall}", "/admin/Index");
                 endpoints.MapFallbackToPage("/display/{*catchall}", "/display/Index2");
             });
+        }
+
+        public sealed class SecurityHeadersMiddleware
+        {
+            private readonly RequestDelegate _next;
+
+            public SecurityHeadersMiddleware(RequestDelegate next)
+            {
+                _next = next;
+            }
+
+            public Task Invoke(HttpContext context)
+            {
+                
+                context.Response.Headers.Add("strict-transport-security", new StringValues("max-age = 31536000"));
+
+                return _next(context);
+            }
         }
     }
 }

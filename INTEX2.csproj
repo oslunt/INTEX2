@@ -49,6 +49,7 @@
     <Content Remove="wwwroot\lib\qrcode\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="wwwroot\final_model2.onnx" />
     <None Include="wwwroot\lib\qrcode\qrcode.min.js" />
   </ItemGroup>
 </Project>
