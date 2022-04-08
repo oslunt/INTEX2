@@ -48,15 +48,16 @@ namespace INTEX2
                 new InferenceSession("wwwroot/final_model2.onnx"));
 
             // DbContext for the Crash Data  
+
             services.AddDbContext<CrashDbContext>(options =>
             {
-                options.UseMySql(Configuration["ConnectionStrings:CrashDataDbConnection"]);
+                options.UseMySql(Environment.GetEnvironmentVariable("CrashDataDbConnection"));
             });
 
             // DbContext for Identity 
             services.AddDbContext<AppIdentityDbContext>(options =>
             {
-                options.UseMySql(Configuration["ConnectionStrings:IdentityDbConnection"]);
+                options.UseMySql(Environment.GetEnvironmentVariable("IdentityDbConnection"));
             });
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -74,12 +75,6 @@ namespace INTEX2
                 options.IncludeSubDomains = true;
                 options.MaxAge = TimeSpan.FromDays(365);
             });
-
-            //services.AddHttpsRedirection(options =>
-            //{
-            //    options.RedirectStatusCode = StatusCodes.Status301MovedPermanently;
-            //    options.HttpsPort = 443;
-            //});
 
             services.AddRazorPages();
             services.AddScoped<ICrashRepository, EFCrashRepository>();
@@ -101,8 +96,6 @@ namespace INTEX2
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            //app.UseHttpsRedirection();
 
             app.Use(async (ctx, next) =>
             {
@@ -152,7 +145,7 @@ namespace INTEX2
             public Task Invoke(HttpContext context)
             {
                 
-                context.Response.Headers.Add("strict-transport-security", new StringValues("max-age = 31536000"));
+                context.Response.Headers.Add("strict-transport-security", new StringValues("max-age=31536000"));
 
                 return _next(context);
             }
